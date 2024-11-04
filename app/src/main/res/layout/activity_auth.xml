@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textView"
-        android:id="@+id/tab"
+        android:id="@+id/tabLayout"
         android:layout_marginTop="30dp">
 
         <com.google.android.material.tabs.TabItem
@@ -40,9 +40,10 @@
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tab"
+        android:layout_below="@id/tabLayout"
         android:layout_marginTop="30dp"/>
 
 </RelativeLayout>

@@ -1,21 +1,34 @@
 package com.example.ocsapp.activities
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.viewpager2.widget.ViewPager2
 import com.example.ocsapp.R
+import com.example.ocsapp.adapters.MyFragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+
 
 class AuthActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_auth)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        val viewPager2 = findViewById<ViewPager2>(R.id.viewPager)
+        val myAdapter = MyFragmentStateAdapter(this)
+        viewPager2.adapter = myAdapter
+
+        TabLayoutMediator(tabLayout, viewPager2) { tab: TabLayout.Tab, position: Int ->
+            when (position) {
+                0 -> {
+                    tab.text = "Login"
+                }
+                1 -> {
+                    tab.text = "Sign Up"
+                }
+            }
+        }.attach()
     }
 }
