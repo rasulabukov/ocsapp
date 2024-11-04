@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/Home"
+        android:title="Главная" />
+    <item
+        android:id="@+id/shop"
+        android:title="Корзина" />
+    <item
+        android:id="@+id/mess"
+        android:title="Мессенджер" />
+    <item
+        android:id="@+id/settings"
+        android:title="Настройки" />
+
+</menu>
