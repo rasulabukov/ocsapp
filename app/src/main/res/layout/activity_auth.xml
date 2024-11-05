@@ -24,6 +24,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textView"
         android:id="@+id/tabLayout"
+        app:tabMode="fixed"
+        android:layout_marginHorizontal="10dp"
+        app:tabGravity="fill"
+        app:tabIndicatorGravity="stretch"
+        app:tabIndicatorFullWidth="true"
+        app:tabIndicatorAnimationMode="linear"
+        app:tabIndicatorColor="@null"
+        android:background="@drawable/bg_tab"
+        app:tabSelectedTextColor="@color/white"
+        app:tabRippleColor="#003194"
+        app:tabIndicator="@drawable/bg_tab_auth"
         android:layout_marginTop="30dp">
 
         <com.google.android.material.tabs.TabItem
