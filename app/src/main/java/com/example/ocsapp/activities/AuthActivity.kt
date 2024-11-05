@@ -31,4 +31,5 @@ class AuthActivity : AppCompatActivity() {
             }
         }.attach()
     }
+    
 }

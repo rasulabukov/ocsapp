@@ -18,4 +18,6 @@ class MyFragmentStateAdapter(fragmentActivity: FragmentActivity): FragmentStateA
             else -> LoginFragment()
         }
     }
+
+
 }
