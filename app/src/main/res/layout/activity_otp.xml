@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.OtpActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginVertical="40dp"
+        android:layout_marginHorizontal="20dp">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_google"
+            android:src="@drawable/baseline_arrow_back_ios_new_24" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:text="Please check your email"
+            android:fontFamily="@font/adlam_display"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="We’ve sent a code to"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="helloworld@gmail.com"
+                android:layout_marginStart="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_google"
+            android:inputType="number"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_google"
+            android:inputType="number"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_google"
+            android:inputType="number"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_google"
+            android:inputType="number"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_google"
+            android:inputType="number"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/bg_button_login"
+            android:fontFamily="sans-serif"
+            android:text="Verify"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send code again"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:20"
+                android:layout_marginStart="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

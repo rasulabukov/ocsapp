@@ -13,6 +13,15 @@
         android:theme="@style/Theme.OCSapp"
         tools:targetApi="31">
         <activity
+            android:name=".activities.NewPassActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.OtpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ForgotPassActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.OCSapp" />

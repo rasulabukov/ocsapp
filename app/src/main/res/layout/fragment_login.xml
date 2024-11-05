@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/cont_main"
         android:layout_width="360dp"
-        android:layout_height="480dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_login"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
