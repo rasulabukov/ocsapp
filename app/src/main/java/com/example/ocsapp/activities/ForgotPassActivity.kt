@@ -1,6 +1,9 @@
 package com.example.ocsapp.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,6 +19,19 @@ class ForgotPassActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+        val login: TextView = findViewById(R.id.login)
+        val btn: Button = findViewById(R.id.btn)
+
+        login.setOnClickListener {
+            val intent = Intent(this, AuthActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        btn.setOnClickListener {
+            val intent = Intent(this, OtpActivity::class.java)
+            startActivity(intent)
         }
     }
 }
