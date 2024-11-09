@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SplashScreenActivity">
+    tools:context=".activities.SplashScreenActivity"
+    style="@style/SCREEN">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/cont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:src="@drawable/icon" />
+
+        <TextView
+            android:id="@+id/ocs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TEXT"
+            android:text="OCS"
+            android:textSize="50sp"
+            android:layout_below="@id/imageView"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:fontFamily="@font/adlam_display"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
