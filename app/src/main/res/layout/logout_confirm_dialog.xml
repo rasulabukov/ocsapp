@@ -70,7 +70,6 @@
                 android:id="@+id/conf_btn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="#1D61E7"
                 android:fontFamily="@font/adlam_display"
