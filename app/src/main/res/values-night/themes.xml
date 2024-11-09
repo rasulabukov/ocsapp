@@ -6,4 +6,20 @@
 
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="SCREEN">
+        <item name="android:background">#1c1c1c</item>
+    </style>
+
+    <style name="TEXT">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="TEXTAUTH">
+        <item name="android:textColor">#BCBCBC</item>
+    </style>
+
+    <style name="VIEW">
+        <item name="android:background">#999999</item>
+    </style>
 </resources>

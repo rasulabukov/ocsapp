@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AuthActivity">
+    tools:context=".activities.AuthActivity"
+    style="@style/SCREEN">
 
 
     <TextView
@@ -16,6 +17,7 @@
         android:fontFamily="@font/adlam_display"
         android:text="Authorization"
         android:textSize="50sp"
+        style="@style/TEXT"
         android:layout_marginTop="20dp"
         />
 
@@ -31,7 +33,7 @@
         app:tabIndicatorFullWidth="true"
         app:tabIndicatorAnimationMode="linear"
         app:tabIndicatorColor="@null"
-        android:background="@drawable/bg_tab"
+        style="@style/SCREEN"
         app:tabSelectedTextColor="@color/white"
         app:tabRippleColor="#003194"
         app:tabIndicator="@drawable/bg_tab_auth"
