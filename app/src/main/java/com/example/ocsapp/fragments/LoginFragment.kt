@@ -26,6 +26,7 @@ class LoginFragment : Fragment() {
 
         val signup: TextView = view.findViewById(R.id.signup)
         val forgot: TextView = view.findViewById(R.id.forgot)
+        val login: Button = view.findViewById(R.id.login_btn)
 
         forgot.setOnClickListener {
             val intent = Intent(activity, ForgotPassActivity::class.java)
@@ -35,6 +36,11 @@ class LoginFragment : Fragment() {
         signup.setOnClickListener {
             val mainActivity = activity as AuthActivity
             mainActivity.findViewById<ViewPager2>(R.id.viewPager).currentItem = 1
+        }
+
+        login.setOnClickListener {
+            val intent = Intent(activity, MainActivity::class.java)
+            startActivity(intent)
         }
 
         return view
