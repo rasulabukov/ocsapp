@@ -2,35 +2,36 @@ package com.example.ocsapp.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintSet.Layout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.slidingpanelayout.widget.SlidingPaneLayout.LayoutParams
 import com.example.ocsapp.R
+import com.example.ocsapp.SharedPreferenceManager
 
 class SplashScreenActivity : AppCompatActivity() {
+    private lateinit var cont: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
-
-        val cont: RelativeLayout = findViewById(R.id.cont)
-
+        cont = findViewById(R.id.cont)
 
         cont.alpha = 0f
-        cont.animate().setDuration(1500).alpha(1f).withEndAction{
+        cont.animate().setDuration(1500).alpha(1f).withEndAction {
+            isFirstTime()
+        }
+    }
+
+    private fun isFirstTime() {
+        val sharedPreferenceManager = SharedPreferenceManager(this)
+        if (sharedPreferenceManager.isFirstTime) {
             val i = Intent(this, OnBoardActivity::class.java)
+            startActivity(i)
+            finish()
+        } else {
+            val i = Intent(this, AuthActivity::class.java)
             startActivity(i)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
-
     }
 }

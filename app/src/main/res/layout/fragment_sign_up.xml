@@ -201,7 +201,8 @@
                 android:drawableLeft="@drawable/google"
                 android:drawablePadding="5dp"
                 android:fontFamily="@font/adlam_display"
-                android:text="Sign up with Google" />
+                android:text="Sign up with Google"
+                style="@style/TEXT"/>
 
         </LinearLayout>
 
