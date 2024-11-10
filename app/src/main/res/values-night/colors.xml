@@ -3,5 +3,5 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="blue">#1D61E7</color>
-    <color name="otp">#000000</color>
+    <color name="otp">#FFFFFF</color>
 </resources>

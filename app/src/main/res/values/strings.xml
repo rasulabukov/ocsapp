@@ -16,8 +16,8 @@
 
     <string name="ob3title">Удобные покупки</string>
     <string name="ob3desc">Делайте покупки легко и быстро! От выбора размеров до безопасной оплаты — мы заботимся о каждой детали. 🛒💳</string>
-=
 
+    <string name="timer"><u>Send</u></string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
