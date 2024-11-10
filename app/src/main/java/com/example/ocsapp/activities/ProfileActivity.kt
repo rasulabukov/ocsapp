@@ -1,6 +1,8 @@
 package com.example.ocsapp.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -13,11 +15,16 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
+        val editBtn: ImageButton = findViewById(R.id.editProfile)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Profile"
+
+        editBtn.setOnClickListener {
+            startActivity(Intent(this, EditProfileActivity::class.java))
+        }
 
     }
 }
