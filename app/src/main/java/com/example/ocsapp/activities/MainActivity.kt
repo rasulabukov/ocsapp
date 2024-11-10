@@ -28,6 +28,7 @@ import com.example.ocsapp.fragments.FavouriteFragment
 import com.example.ocsapp.fragments.HomeFragment
 import com.example.ocsapp.fragments.SettingsFragment
 import com.google.android.material.navigation.NavigationView
+import de.hdodenhof.circleimageview.CircleImageView
 import java.sql.Savepoint
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -40,14 +41,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navView: NavigationView = findViewById(R.id.navigation_view)
         drawerLayout = findViewById<DrawerLayout>(R.id.main)
+        val headerView = navView.getHeaderView(0)
+        val headerAva: CircleImageView = headerView.findViewById(R.id.ava)
+
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
         navView.setNavigationItemSelectedListener(this)
 
         val toogle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toogle)
         toogle.syncState()
 
+        headerAva.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
 
         if(savedInstanceState == null){
             replaceFragment(HomeFragment())

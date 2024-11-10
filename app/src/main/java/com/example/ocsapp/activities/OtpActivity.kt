@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.TypedValue
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -27,10 +28,15 @@ class OtpActivity : AppCompatActivity() {
         startCountdown(timeLeftInMillis)
         
         val btn: Button = findViewById(R.id.btn)
+        val back: ImageButton = findViewById(R.id.back)
 
         btn.setOnClickListener {
             val intent = Intent(this, NewPassActivity::class.java)
             startActivity(intent)
+        }
+
+        back.setOnClickListener {
+            finish()
         }
     }
 

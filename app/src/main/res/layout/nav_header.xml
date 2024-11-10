@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="mrgaaksm@gmail.com"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             style="@style/TEXTAUTH"
             android:layout_toRightOf="@id/ava"
             android:textColor="#878787"

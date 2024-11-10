@@ -41,6 +41,7 @@ class LoginFragment : Fragment() {
         login.setOnClickListener {
             val intent = Intent(activity, MainActivity::class.java)
             startActivity(intent)
+            activity?.finish()
         }
 
         return view

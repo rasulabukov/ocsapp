@@ -16,10 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/SCREEN">
-
-
-        </androidx.appcompat.widget.Toolbar>
+            style="@style/SCREEN"/>
 
         <FrameLayout
             android:id="@+id/fragment_cont"

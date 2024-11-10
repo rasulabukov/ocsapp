@@ -1,14 +1,17 @@
 package com.example.ocsapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ocsapp.R
 import com.example.ocsapp.activities.AuthActivity
+import com.example.ocsapp.activities.MainActivity
 
 class SignUpFragment : Fragment() {
 
@@ -20,10 +23,17 @@ class SignUpFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_sign_up, container, false)
 
         val signin: TextView = view.findViewById(R.id.signin)
+        val signup: Button = view.findViewById(R.id.signup_btn)
 
         signin.setOnClickListener {
             val mainActivity = activity as AuthActivity
             mainActivity.findViewById<ViewPager2>(R.id.viewPager).currentItem = 0
+        }
+
+        signup.setOnClickListener {
+            val intent = Intent(activity, MainActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
         }
 
         return view
