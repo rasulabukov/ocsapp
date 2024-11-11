@@ -91,7 +91,7 @@ class OnBoardActivity : AppCompatActivity() {
     private fun homeScreen() {
         val sharedPrefereceManager = SharedPreferenceManager(this)
         sharedPrefereceManager.isFirstTime = false
-        val i = Intent(this, AuthActivity::class.java)
+        val i = Intent(this, MainActivity::class.java)
         startActivity(i)
         finish()
     }
