@@ -14,11 +14,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ocsapp.R
 import com.example.ocsapp.activities.AuthActivity
 import com.example.ocsapp.activities.MainActivity
+import com.example.ocsapp.data.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class SignUpFragment : Fragment() {
     private lateinit var firstNameEditText: EditText
@@ -29,6 +33,10 @@ class SignUpFragment : Fragment() {
     private lateinit var signin: TextView
     private lateinit var signup: Button
     private lateinit var warningTextView: TextView
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +54,9 @@ class SignUpFragment : Fragment() {
         passwordEditText = view.findViewById(R.id.password)
         warningTextView = view.findViewById(R.id.error)
 
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
+
         signup.isEnabled = false
         signup.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_button_login_error)
 
@@ -58,6 +69,7 @@ class SignUpFragment : Fragment() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+
         lastNameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -66,6 +78,7 @@ class SignUpFragment : Fragment() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+
         emailEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -74,6 +87,7 @@ class SignUpFragment : Fragment() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+
         phoneEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -82,6 +96,7 @@ class SignUpFragment : Fragment() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+
         passwordEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -98,17 +113,41 @@ class SignUpFragment : Fragment() {
         }
 
         signup.setOnClickListener {
-            CreateAccount()
+            val firstname = firstNameEditText.text.toString()
+            val lastname = lastNameEditText.text.toString()
+            val email = emailEditText.text.toString()
+            val phone = phoneEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                if(it.isSuccessful){
+                    val database = database.reference.child("Users").child(auth.currentUser!!.uid)
+                    val user: User = User(firstname, lastname, email, phone, auth.currentUser!!.uid)
+                    database.setValue(user).addOnCompleteListener {
+                        if(it.isSuccessful){
+                            val intent = Intent(activity, MainActivity::class.java)
+                            startActivity(intent)
+                            activity?.finish()
+                        } else{
+                            Toast.makeText(requireContext(), "Что то пошло не так, попробуйте снова", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                else{
+                    Toast.makeText(requireContext(), "Что то пошло не так, попробуйте снова", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         return view
     }
 
     private fun CreateAccount() {
-        val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent)
-        activity?.finish()
+
+
+
     }
+
     private fun validateFirstName() {
         val firstName = firstNameEditText.text.toString()
         if (firstName.isNotEmpty() && !firstName[0].isUpperCase()) {

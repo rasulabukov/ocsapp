@@ -50,6 +50,7 @@ class NewPassActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 validatePasswordConf()
                 validateAllInputs()
+                validateConfirm()
             }
             override fun afterTextChanged(s: Editable?) {}
         })
@@ -88,9 +89,24 @@ class NewPassActivity : AppCompatActivity() {
         if (password.length < 6) {
             warningTextView.text = "Пароль должен содержать минимум 6 символов."
             confpassEditText.background = ContextCompat.getDrawable(this, R.drawable.bg_google_error)
+        }
+        else {
+            warningTextView.text = ""
+            confpassEditText.background = ContextCompat.getDrawable(this, R.drawable.bg_google)
+        }
+    }
+
+    private fun validateConfirm() {
+        val password = passwordEditText.text.toString()
+        val passwordconf = confpassEditText.text.toString()
+        if (password != passwordconf) {
+            warningTextView.text = "Пароли не совпадают."
+            passwordEditText.background = ContextCompat.getDrawable(this, R.drawable.bg_google_error)
+            confpassEditText.background = ContextCompat.getDrawable(this, R.drawable.bg_google_error)
         } else {
             warningTextView.text = ""
             confpassEditText.background = ContextCompat.getDrawable(this, R.drawable.bg_google)
+            passwordEditText.background = ContextCompat.getDrawable(this, R.drawable.bg_google)
         }
     }
 
@@ -98,7 +114,7 @@ class NewPassActivity : AppCompatActivity() {
         val password = passwordEditText.text.toString()
         val passwordconf = confpassEditText.text.toString()
 
-        val isValid = password.length >= 6 && passwordconf.length >= 6
+        val isValid = (password.length >= 6 && passwordconf.length >= 6) && (password == passwordconf)
 
         btn_reset.isEnabled = isValid
         btn_reset.background = (if (isValid) ContextCompat.getDrawable(this, R.drawable.bg_button_login) else ContextCompat.getDrawable(this, R.drawable.bg_button_login_error))
