@@ -88,8 +88,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         btnyes.setOnClickListener {
             val intent = Intent(this, AuthActivity::class.java)
-            finish()
+            dialog.dismiss()
             startActivity(intent)
+            finish()
             Toast.makeText(this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show()
         }
         btnno.setOnClickListener {

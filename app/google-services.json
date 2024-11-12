@@ -1,8 +1,9 @@
 {
   "project_info": {
     "project_number": "433456839940",
+    "firebase_url": "https://ocsapp-8a97e-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "ocsapp-8a97e",
-    "storage_bucket": "ocsapp-8a97e.appspot.com"
+    "storage_bucket": "ocsapp-8a97e.firebasestorage.app"
   },
   "client": [
     {

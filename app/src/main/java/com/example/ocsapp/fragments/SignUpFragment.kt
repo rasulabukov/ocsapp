@@ -33,6 +33,7 @@ class SignUpFragment : Fragment() {
     private lateinit var signin: TextView
     private lateinit var signup: Button
     private lateinit var warningTextView: TextView
+
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
 
@@ -113,40 +114,41 @@ class SignUpFragment : Fragment() {
         }
 
         signup.setOnClickListener {
-            val firstname = firstNameEditText.text.toString()
-            val lastname = lastNameEditText.text.toString()
-            val email = emailEditText.text.toString()
-            val phone = phoneEditText.text.toString()
-            val password = passwordEditText.text.toString()
-
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                if(it.isSuccessful){
-                    val database = database.reference.child("Users").child(auth.currentUser!!.uid)
-                    val user: User = User(firstname, lastname, email, phone, auth.currentUser!!.uid)
-                    database.setValue(user).addOnCompleteListener {
-                        if(it.isSuccessful){
-                            val intent = Intent(activity, MainActivity::class.java)
-                            startActivity(intent)
-                            activity?.finish()
-                        } else{
-                            Toast.makeText(requireContext(), "Что то пошло не так, попробуйте снова", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-                else{
-                    Toast.makeText(requireContext(), "Что то пошло не так, попробуйте снова", Toast.LENGTH_SHORT).show()
-                }
-            }
+            CreateAccount()
         }
 
         return view
     }
 
     private fun CreateAccount() {
+        val firstname = firstNameEditText.text.toString()
+        val lastname = lastNameEditText.text.toString()
+        val email = emailEditText.text.toString()
+        val phone = phoneEditText.text.toString()
+        val password = passwordEditText.text.toString()
 
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val userId = auth.currentUser!!.uid
+                val database = FirebaseDatabase.getInstance().reference.child("Users").child(userId)
+                val user = User(firstname, lastname, email, phone, userId)
 
-
+                database.setValue(user).addOnCompleteListener { dbTask ->
+                    if (dbTask.isSuccessful) {
+                        Toast.makeText(activity, "Регистрация успешна.", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(activity, MainActivity::class.java)
+                        startActivity(intent)
+                        activity?.finish()
+                    } else {
+                        Toast.makeText(activity, "Ошибка при сохранении данных: ${dbTask.exception?.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(activity, "Ошибка регистрации: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
 
     private fun validateFirstName() {
         val firstName = firstNameEditText.text.toString()
