@@ -24,12 +24,48 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ava"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ava"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/outline_edit_24"
+                android:text="Rasul Abukov"
+                android:layout_centerHorizontal="true"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/ava"
+                style="@style/TEXT" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="mrgaaksm@gmail.com"
+                android:layout_marginTop="5dp"
+                style="@style/TEXTAUTH"
+                android:id="@+id/emailTextview"
+                android:textColor="#878787"
+                android:layout_below="@id/name"
+                android:layout_centerHorizontal="true"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_button_login"
+                android:text="Редактировать профиль"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
                 android:id="@+id/editProfile"
-                android:layout_alignParentEnd="true"/>
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/emailTextview"
+                android:layout_centerHorizontal="true"/>
 
 
         </RelativeLayout>

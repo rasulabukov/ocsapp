@@ -1,9 +1,16 @@
 package com.example.ocsapp.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "Users")
 data class User(
-    var firstname: String? = null,
-    var lastname: String? = null,
-    var email: String? = null,
-    var phone: String? = null,
-    var uid: String? = null
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    var firstname: String,
+    var lastname: String,
+    var email: String,
+    var phone: String,
+    var profileimage: String,
+    var password: String,
 )

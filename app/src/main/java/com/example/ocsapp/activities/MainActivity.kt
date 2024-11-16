@@ -2,22 +2,16 @@ package com.example.ocsapp.activities
 
 import android.app.Dialog
 import android.content.Intent
-import android.content.ServiceConnection
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.Window
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.Toast
-import android.widget.Toolbar
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -29,7 +23,6 @@ import com.example.ocsapp.fragments.HomeFragment
 import com.example.ocsapp.fragments.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
-import java.sql.Savepoint
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -53,7 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.addDrawerListener(toogle)
         toogle.syncState()
 
-        headerAva.setOnClickListener {
+        headerView.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
 

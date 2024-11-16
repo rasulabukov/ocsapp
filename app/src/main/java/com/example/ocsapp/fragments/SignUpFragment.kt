@@ -1,28 +1,20 @@
 package com.example.ocsapp.fragments
 
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ocsapp.R
 import com.example.ocsapp.activities.AuthActivity
-import com.example.ocsapp.activities.MainActivity
-import com.example.ocsapp.data.User
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 
 class SignUpFragment : Fragment() {
     private lateinit var firstNameEditText: EditText
@@ -33,10 +25,6 @@ class SignUpFragment : Fragment() {
     private lateinit var signin: TextView
     private lateinit var signup: Button
     private lateinit var warningTextView: TextView
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var database: FirebaseDatabase
-
 
 
     override fun onCreateView(
@@ -55,8 +43,6 @@ class SignUpFragment : Fragment() {
         passwordEditText = view.findViewById(R.id.password)
         warningTextView = view.findViewById(R.id.error)
 
-        auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance()
 
         signup.isEnabled = false
         signup.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_button_login_error)
@@ -126,27 +112,9 @@ class SignUpFragment : Fragment() {
         val email = emailEditText.text.toString()
         val phone = phoneEditText.text.toString()
         val password = passwordEditText.text.toString()
+        val profileimage = ""
 
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val userId = auth.currentUser!!.uid
-                val database = FirebaseDatabase.getInstance().reference.child("Users").child(userId)
-                val user = User(firstname, lastname, email, phone, userId)
 
-                database.setValue(user).addOnCompleteListener { dbTask ->
-                    if (dbTask.isSuccessful) {
-                        Toast.makeText(activity, "Регистрация успешна.", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(activity, MainActivity::class.java)
-                        startActivity(intent)
-                        activity?.finish()
-                    } else {
-                        Toast.makeText(activity, "Ошибка при сохранении данных: ${dbTask.exception?.message}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                Toast.makeText(activity, "Ошибка регистрации: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
 

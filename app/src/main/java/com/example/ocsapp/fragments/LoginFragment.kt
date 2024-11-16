@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +12,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ocsapp.R
 import com.example.ocsapp.activities.AuthActivity
 import com.example.ocsapp.activities.ForgotPassActivity
-import com.example.ocsapp.activities.MainActivity
 
 class LoginFragment : Fragment() {
 
@@ -38,6 +36,7 @@ class LoginFragment : Fragment() {
         passwordEditText = view.findViewById(R.id.password)
         warningTextView = view.findViewById(R.id.error)
         login = view.findViewById(R.id.login_btn)
+
 
         val signup: TextView = view.findViewById(R.id.signup)
         val forgot: TextView = view.findViewById(R.id.forgot)
@@ -74,12 +73,14 @@ class LoginFragment : Fragment() {
         }
 
         login.setOnClickListener {
-            val intent = Intent(activity, MainActivity::class.java)
-            startActivity(intent)
-            activity?.finish()
+            Login()
         }
 
         return view
+    }
+
+    private fun Login() {
+
     }
 
     private fun validateEmail() {
