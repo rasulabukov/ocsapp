@@ -11,12 +11,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.Window
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.ocsapp.R
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProfileActivity : AppCompatActivity() {
@@ -35,11 +37,20 @@ class ProfileActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Profile"
         ava = findViewById(R.id.ava)
+        val otherTextView: TextView = findViewById(R.id.other)
+        val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet, null)
+
+        val bottomSheetDialog = BottomSheetDialog(this)
 
         loadUserInfo()
 
         editBtn.setOnClickListener {
             startActivity(Intent(this, EditProfileActivity::class.java))
+        }
+        otherTextView.setOnClickListener {
+            bottomSheetDialog.setContentView(bottomSheet)
+            bottomSheetDialog.show()
+
         }
 
     }

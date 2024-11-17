@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.Window
 import android.widget.Button
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout = findViewById<DrawerLayout>(R.id.main)
         val headerView = navView.getHeaderView(0)
         val headerAva: CircleImageView = headerView.findViewById(R.id.ava)
+        val headerCont: RelativeLayout = headerView.findViewById(R.id.cont_profile)
 
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -46,23 +48,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.addDrawerListener(toogle)
         toogle.syncState()
 
-        headerView.setOnClickListener {
+        headerCont.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
 
         if(savedInstanceState == null){
             replaceFragment(HomeFragment())
             navView.setCheckedItem(R.id.home)
+            supportActionBar?.title = "Главная"
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.home -> replaceFragment(HomeFragment())
-            R.id.cart -> replaceFragment(CartFragment())
-            R.id.fav -> replaceFragment(FavouriteFragment())
-            R.id.settings -> replaceFragment(SettingsFragment())
-            R.id.mess -> replaceFragment(ContactFragment())
+            R.id.home -> {
+                replaceFragment(HomeFragment())
+                supportActionBar?.title = "Главная"
+            }
+            R.id.cart -> {
+                replaceFragment(CartFragment())
+                supportActionBar?.title = "Корзина"
+            }
+            R.id.fav -> {
+                replaceFragment(FavouriteFragment())
+                supportActionBar?.title = "Избранное"
+            }
+            R.id.settings -> {
+                replaceFragment(SettingsFragment())
+                supportActionBar?.title = "Настройки"
+            }
+            R.id.mess -> {
+                replaceFragment(ContactFragment())
+                supportActionBar?.title = "Контакты"
+            }
             R.id.logout -> showDialog()
         }
         drawerLayout.closeDrawer(GravityCompat.START)

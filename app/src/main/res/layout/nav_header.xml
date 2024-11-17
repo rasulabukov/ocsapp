@@ -6,6 +6,7 @@
     android:background="@color/blue">
 
     <RelativeLayout
+        android:id="@+id/cont_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
