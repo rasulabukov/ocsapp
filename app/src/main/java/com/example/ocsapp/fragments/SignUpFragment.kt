@@ -1,5 +1,6 @@
 package com.example.ocsapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -17,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ocsapp.R
 import com.example.ocsapp.activities.AuthActivity
+import com.example.ocsapp.activities.MainActivity
 import com.example.ocsapp.data.UserState
 import com.example.ocsapp.viewmodel.SupabaseAuthViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -31,6 +34,7 @@ class SignUpFragment : Fragment() {
     private lateinit var signup: Button
     private lateinit var warningTextView: TextView
     private lateinit var viewModel: SupabaseAuthViewModel
+    private lateinit var progressBar: ProgressBar
 
 
     override fun onCreateView(
@@ -49,19 +53,27 @@ class SignUpFragment : Fragment() {
         passwordEditText = view.findViewById(R.id.password)
         warningTextView = view.findViewById(R.id.error)
 
+        progressBar = view.findViewById(R.id.progressBar)
+
         viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
 
         viewModel.userState.observe(viewLifecycleOwner) { userState ->
             when (userState) {
                 is UserState.Loading -> {
-                    // Здесь можно показать прогресс
+                    progressBar.visibility = View.VISIBLE
+                    signup.isEnabled = false
                 }
 
                 is UserState.Success -> {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), userState.message, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(activity, MainActivity::class.java)
+                    startActivity(intent)
+                    activity?.finish()
                 }
 
                 is UserState.Error -> {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), userState.errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }

@@ -13,7 +13,10 @@ import com.example.ocsapp.data.UserState
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 class SupabaseAuthViewModel : ViewModel() {
     private val _user = MutableLiveData<User>()
@@ -34,9 +37,10 @@ class SupabaseAuthViewModel : ViewModel() {
         viewModelScope.launch {
             _userState.value = UserState.Loading
             try {
-                supabase.auth.signUpWith(Email) {
+                val response = supabase.auth.signUpWith(Email) {
                     email = userEmail
                     password = userPassword
+
                 }
 
                 saveToken(context)
@@ -87,7 +91,7 @@ class SupabaseAuthViewModel : ViewModel() {
             _userState.value = UserState.Loading
             try {
                 supabase.auth.signOut()
-                _userState.value = UserState.Success("Выход из аккаунта прошёл успешно")
+                _userState.value = UserState.Success("Вы вышли из аккаунта")
             } catch (e: Exception) {
                 _userState.value = UserState.Error("Ошибка: ${e.message}")
             }
@@ -124,11 +128,12 @@ class SupabaseAuthViewModel : ViewModel() {
                 "avatar" to avatar
             )
 
-            supabase.from("users").insert(newUser)
+            supabase.postgrest["users"].upsert(newUser)
 
 
         } catch (e: Exception) {
             _userState.value = UserState.Error("Ошибка базы данных: ${e.message}")
+            Log.d("error","Ошибка базы данных: ${e.message}")
         }
     }
 }

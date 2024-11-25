@@ -14,11 +14,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ocsapp.R
 import com.example.ocsapp.activities.AuthActivity
 import com.example.ocsapp.activities.ForgotPassActivity
 import com.example.ocsapp.activities.MainActivity
+import com.example.ocsapp.data.UserState
+import com.example.ocsapp.viewmodel.SupabaseAuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +33,7 @@ class LoginFragment : Fragment() {
     private lateinit var passwordEditText: EditText
     private lateinit var warningTextView: TextView
     private lateinit var login: Button
+    private lateinit var viewModel: SupabaseAuthViewModel
 
 
     override fun onCreateView(
@@ -44,6 +48,26 @@ class LoginFragment : Fragment() {
         warningTextView = view.findViewById(R.id.error)
         login = view.findViewById(R.id.login_btn)
 
+        viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
+
+        viewModel.userState.observe(viewLifecycleOwner) { userState ->
+            when (userState) {
+                is UserState.Loading -> {
+                    // Здесь можно показать прогресс
+                }
+
+                is UserState.Success -> {
+                    Toast.makeText(requireContext(), userState.message, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(activity, MainActivity::class.java)
+                    startActivity(intent)
+                    activity?.finish()
+                }
+
+                is UserState.Error -> {
+                    Toast.makeText(requireContext(), userState.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         val signup: TextView = view.findViewById(R.id.signup)
         val forgot: TextView = view.findViewById(R.id.forgot)
@@ -90,7 +114,7 @@ class LoginFragment : Fragment() {
         val email = emailEditText.text.toString()
         val password = passwordEditText.text.toString()
 
-
+        viewModel.login(requireContext(), email, password)
     }
 
     private fun validateEmail() {

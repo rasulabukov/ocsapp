@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="120dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/blue">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:cornerRadius="5dp"
+        android:fontFamily="sans-serif"
+        android:layout_centerInParent="true"
+        android:backgroundTint="@color/white"
+        android:text="Войти"
+        android:layout_marginHorizontal="40dp"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:id="@+id/cont_profile"
@@ -46,4 +62,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>

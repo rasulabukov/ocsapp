@@ -17,13 +17,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.ocsapp.R
+import com.example.ocsapp.data.UserState
+import com.example.ocsapp.viewmodel.SupabaseAuthViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var ava: CircleImageView
+
+    private lateinit var viewModel: SupabaseAuthViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +44,24 @@ class ProfileActivity : AppCompatActivity() {
         ava = findViewById(R.id.ava)
         val otherTextView: TextView = findViewById(R.id.other)
         val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet, null)
+
+        viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
+
+        viewModel.userState.observe(this) { userState ->
+            when (userState) {
+                is UserState.Loading -> {
+                    // Здесь можно показать прогресс
+                }
+
+                is UserState.Success -> {
+                    Toast.makeText(this, userState.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is UserState.Error -> {
+                    Toast.makeText(this, userState.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         val bottomSheetDialog = BottomSheetDialog(this)
 
@@ -87,9 +110,10 @@ class ProfileActivity : AppCompatActivity() {
         btnyes.setOnClickListener {
             val intent = Intent(this, AuthActivity::class.java)
             dialog.dismiss()
+            viewModel.logout()
+            Toast.makeText(this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show()
             startActivity(intent)
             finish()
-            Toast.makeText(this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show()
         }
         btnno.setOnClickListener {
             dialog.dismiss()
