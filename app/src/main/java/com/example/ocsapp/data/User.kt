@@ -1,16 +1,13 @@
 package com.example.ocsapp.data
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
-@Entity(tableName = "Users")
+@Serializable
 data class User(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    var firstname: String,
-    var lastname: String,
-    var email: String,
-    var phone: String,
-    var profileimage: String,
-    var password: String,
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val phone: String,
+    val password: String,
+    val profileImage: String
 )

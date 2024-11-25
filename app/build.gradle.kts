@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
+    kotlin("plugin.serialization") version "2.1.0-RC2"
 }
 
 android {
@@ -40,11 +41,16 @@ android {
 }
 
 dependencies {
-    val room_version = "2.6.1"
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    testImplementation("androidx.room:room-testing:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
+    val version = "3.0.2"
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:$version")
+    implementation("io.github.jan-tennert.supabase:auth-kt:$version")
+    implementation("io.github.jan-tennert.supabase:realtime-kt:$version")
+    implementation("io.github.jan-tennert.supabase:supabase-kt:$version")
+    implementation("io.github.jan-tennert.supabase:storage-kt:$version")
+
+    implementation("io.ktor:ktor-client-android:3.0.0")
+    implementation("io.ktor:ktor-client-core:3.0.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

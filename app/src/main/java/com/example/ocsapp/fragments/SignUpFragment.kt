@@ -10,11 +10,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ocsapp.R
 import com.example.ocsapp.activities.AuthActivity
+import com.example.ocsapp.data.UserState
+import com.example.ocsapp.viewmodel.SupabaseAuthViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class SignUpFragment : Fragment() {
     private lateinit var firstNameEditText: EditText
@@ -25,6 +30,7 @@ class SignUpFragment : Fragment() {
     private lateinit var signin: TextView
     private lateinit var signup: Button
     private lateinit var warningTextView: TextView
+    private lateinit var viewModel: SupabaseAuthViewModel
 
 
     override fun onCreateView(
@@ -42,6 +48,24 @@ class SignUpFragment : Fragment() {
         phoneEditText = view.findViewById(R.id.phone)
         passwordEditText = view.findViewById(R.id.password)
         warningTextView = view.findViewById(R.id.error)
+
+        viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
+
+        viewModel.userState.observe(viewLifecycleOwner) { userState ->
+            when (userState) {
+                is UserState.Loading -> {
+                    // Здесь можно показать прогресс
+                }
+
+                is UserState.Success -> {
+                    Toast.makeText(requireContext(), userState.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is UserState.Error -> {
+                    Toast.makeText(requireContext(), userState.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
 
         signup.isEnabled = false
@@ -101,6 +125,7 @@ class SignUpFragment : Fragment() {
 
         signup.setOnClickListener {
             CreateAccount()
+
         }
 
         return view
@@ -115,7 +140,10 @@ class SignUpFragment : Fragment() {
         val profileimage = ""
 
 
+        viewModel.signUp(requireContext(), firstname, lastname, email, phone, password, profileimage)
+
     }
+
 
 
     private fun validateFirstName() {

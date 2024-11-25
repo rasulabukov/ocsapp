@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.Window
 import android.widget.Button
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -24,20 +25,30 @@ import com.example.ocsapp.fragments.HomeFragment
 import com.example.ocsapp.fragments.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
 
+    private lateinit var headerName: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        loadUserInfo()
 
         val navView: NavigationView = findViewById(R.id.navigation_view)
         drawerLayout = findViewById<DrawerLayout>(R.id.main)
         val headerView = navView.getHeaderView(0)
         val headerAva: CircleImageView = headerView.findViewById(R.id.ava)
         val headerCont: RelativeLayout = headerView.findViewById(R.id.cont_profile)
+        headerName = headerView.findViewById(R.id.name)
 
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -56,6 +67,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             replaceFragment(HomeFragment())
             navView.setCheckedItem(R.id.home)
             supportActionBar?.title = "Главная"
+        }
+    }
+
+    private fun loadUserInfo() {
+        CoroutineScope(Dispatchers.IO).launch {
+
         }
     }
 
