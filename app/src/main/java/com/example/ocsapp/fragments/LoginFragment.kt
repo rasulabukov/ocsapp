@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -34,6 +36,8 @@ class LoginFragment : Fragment() {
     private lateinit var warningTextView: TextView
     private lateinit var login: Button
     private lateinit var viewModel: SupabaseAuthViewModel
+    private lateinit var progressBar: ProgressBar
+    private lateinit var google: LinearLayout
 
 
     override fun onCreateView(
@@ -48,15 +52,20 @@ class LoginFragment : Fragment() {
         warningTextView = view.findViewById(R.id.error)
         login = view.findViewById(R.id.login_btn)
 
+        google = view.findViewById(R.id.google)
+
+        progressBar = view.findViewById(R.id.progressBar)
+
         viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
 
         viewModel.userState.observe(viewLifecycleOwner) { userState ->
             when (userState) {
                 is UserState.Loading -> {
-                    // Здесь можно показать прогресс
+                    progressBar.visibility = View.VISIBLE
                 }
 
                 is UserState.Success -> {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), userState.message, Toast.LENGTH_SHORT).show()
                     val intent = Intent(activity, MainActivity::class.java)
                     startActivity(intent)
@@ -64,6 +73,7 @@ class LoginFragment : Fragment() {
                 }
 
                 is UserState.Error -> {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), userState.errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -101,6 +111,10 @@ class LoginFragment : Fragment() {
         signup.setOnClickListener {
             val mainActivity = activity as AuthActivity
             mainActivity.findViewById<ViewPager2>(R.id.viewPager).currentItem = 1
+        }
+
+        google.setOnClickListener {
+            viewModel.loginGoogle(requireContext())
         }
 
         login.setOnClickListener {

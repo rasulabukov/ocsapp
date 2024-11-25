@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
+        viewModel.isUserLoggedIn(this)
 
         navView = findViewById(R.id.navigation_view)
         drawerLayout = findViewById<DrawerLayout>(R.id.main)
@@ -70,9 +72,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.addDrawerListener(toogle)
         toogle.syncState()
 
-        viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
-
-        viewModel.isUserLoggedIn(this)
 
         viewModel.userState.observe(this) { userState ->
             when (userState) {

@@ -11,6 +11,7 @@ import com.example.ocsapp.data.SupabaseClient.supabase
 import com.example.ocsapp.data.User
 import com.example.ocsapp.data.UserState
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
@@ -42,7 +43,6 @@ class SupabaseAuthViewModel : ViewModel() {
                     password = userPassword
 
                 }
-
                 saveToken(context)
 
                 addUserToDatabase(firstName, lastName, userEmail, userPhone, avatar)
@@ -80,6 +80,36 @@ class SupabaseAuthViewModel : ViewModel() {
                 }
                 saveToken(context)
                 _userState.value = UserState.Success("Авторизация прошла успешно")
+            } catch (e: Exception) {
+                _userState.value = UserState.Error("Ошибка: ${e.message}")
+            }
+        }
+    }
+
+    fun loginGoogle(
+        context: Context
+    ) {
+        viewModelScope.launch {
+            _userState.value = UserState.Loading
+            try {
+                supabase.auth.signInWith(Google)
+                saveToken(context)
+                _userState.value = UserState.Success("Авторизация прошла успешно")
+            } catch (e: Exception) {
+                _userState.value = UserState.Error("Ошибка: ${e.message}")
+            }
+        }
+    }
+
+    fun signUpGoogle(
+        context: Context
+    ) {
+        viewModelScope.launch {
+            _userState.value = UserState.Loading
+            try {
+                supabase.auth.signUpWith(Google)
+                saveToken(context)
+                _userState.value = UserState.Success("Регистрация прошла успешно")
             } catch (e: Exception) {
                 _userState.value = UserState.Error("Ошибка: ${e.message}")
             }

@@ -19,7 +19,8 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/cont_profile"
@@ -27,7 +28,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="15dp">
+        android:layout_marginStart="15dp"
+        android:visibility="gone">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ava"

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -35,6 +36,7 @@ class SignUpFragment : Fragment() {
     private lateinit var warningTextView: TextView
     private lateinit var viewModel: SupabaseAuthViewModel
     private lateinit var progressBar: ProgressBar
+    private lateinit var google: LinearLayout
 
 
     override fun onCreateView(
@@ -52,6 +54,7 @@ class SignUpFragment : Fragment() {
         phoneEditText = view.findViewById(R.id.phone)
         passwordEditText = view.findViewById(R.id.password)
         warningTextView = view.findViewById(R.id.error)
+        google = view.findViewById(R.id.google)
 
         progressBar = view.findViewById(R.id.progressBar)
 
@@ -61,7 +64,6 @@ class SignUpFragment : Fragment() {
             when (userState) {
                 is UserState.Loading -> {
                     progressBar.visibility = View.VISIBLE
-                    signup.isEnabled = false
                 }
 
                 is UserState.Success -> {
@@ -138,6 +140,10 @@ class SignUpFragment : Fragment() {
         signup.setOnClickListener {
             CreateAccount()
 
+        }
+
+        google.setOnClickListener {
+            viewModel.signUpGoogle(requireContext())
         }
 
         return view
