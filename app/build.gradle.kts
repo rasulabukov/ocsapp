@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "2.1.0-RC2"
 }
 
@@ -11,11 +10,11 @@ android {
             storeFile = file("C:\\Users\\mrgaa\\.android\\debug.keystore")
         }
     }
-    namespace = "com.example.ocsapp"
+    namespace = "com.example.ocs"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.ocsapp"
+        applicationId = "com.example.ocs"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -57,7 +56,9 @@ dependencies {
     implementation("io.ktor:ktor-client-core:3.0.0")
 
     implementation("androidx.credentials:credentials:1.3.0")
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

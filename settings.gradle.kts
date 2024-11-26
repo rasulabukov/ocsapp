@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "OCSapp"
+rootProject.name = "OCS"
 include(":app")
  
