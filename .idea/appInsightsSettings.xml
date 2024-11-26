@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.example.ocsapp" />
-                  <option name="mobileSdkAppId" value="1:433456839940:android:b35f93c9d42273a4bc2451" />
-                  <option name="projectId" value="ocsapp-8a97e" />
-                  <option name="projectNumber" value="433456839940" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

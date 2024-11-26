@@ -14,13 +14,19 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.ocsapp.R
+import com.example.ocsapp.data.State
+import com.example.ocsapp.data.UserState
+import com.example.ocsapp.viewmodel.SupabaseAuthViewModel
 
 class OtpActivity : AppCompatActivity() {
     private lateinit var firstEdt: EditText
@@ -28,15 +34,74 @@ class OtpActivity : AppCompatActivity() {
     private lateinit var threeEdt: EditText
     private lateinit var fourEdt: EditText
     private lateinit var fiveEdt: EditText
+    private lateinit var sixEdt: EditText
     private lateinit var warningTextView: TextView
     private lateinit var btnOtp: Button
+    private lateinit var timer: TextView
+    private lateinit var emailView: TextView
+
+    private lateinit var progressBar: ProgressBar
+
+    private lateinit var viewModel: SupabaseAuthViewModel
+
+    private var email: String = ""
+    private lateinit var otpFields: List<EditText>
 
     private var countdownTimer: CountDownTimer? = null
-    private var timeLeftInMillis: Long = 30000
+    private var timeLeftInMillis: Long = 60000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otp)
+        progressBar = findViewById(R.id.progressBar)
+        email = intent.getStringExtra("email") ?: ""
+
+        viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
+
+        viewModel.userState.observe(this) { userState ->
+            when (userState) {
+                is UserState.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                }
+
+                is UserState.Success -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, userState.message, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, NewPassActivity::class.java).apply {
+                        putExtra("email", email)
+                    })
+                    finish()
+                }
+
+                is UserState.Error -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, userState.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        viewModel.timer.observe(this) { State ->
+            when (State) {
+                is State.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                }
+
+                is State.Success -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, State.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is State.Error -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, State.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        timer = findViewById(R.id.timer)
+        emailView = findViewById(R.id.email_view)
+
+        emailView.text = email
+
 
         startCountdown(timeLeftInMillis)
 
@@ -47,6 +112,7 @@ class OtpActivity : AppCompatActivity() {
         threeEdt = findViewById(R.id.threeEdt)
         fourEdt = findViewById(R.id.fourEdt)
         fiveEdt = findViewById(R.id.fiveEdt)
+        sixEdt = findViewById(R.id.sixEdt)
         warningTextView = findViewById(R.id.error)
         btnOtp = findViewById(R.id.btn)
 
@@ -54,15 +120,24 @@ class OtpActivity : AppCompatActivity() {
         btnOtp.background = ContextCompat.getDrawable(this, R.drawable.bg_button_login_error)
         firstEdt.requestFocus()
 
+        otpFields = listOf(
+            firstEdt,
+            secondEdt,
+            threeEdt,
+            fourEdt,
+            fiveEdt,
+            sixEdt
+        )
 
         btnOtp.setOnClickListener {
-            val intent = Intent(this, NewPassActivity::class.java)
-            startActivity(intent)
+            val otp = otpFields.joinToString("") { it.text.toString() }
+            viewModel.resetPasswordWithOtp(email, otp)
         }
 
         back.setOnClickListener {
             finish()
         }
+
 
         addTextWatchers()
 
@@ -71,7 +146,7 @@ class OtpActivity : AppCompatActivity() {
     private fun startCountdown(millis: Long) {
         countdownTimer = object : CountDownTimer(millis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val timer: TextView = findViewById(R.id.timer)
+                timer.isClickable = false
                 timeLeftInMillis = millisUntilFinished
                 val seconds = (millisUntilFinished / 1000).toInt()
                 val minutes = seconds / 60
@@ -85,13 +160,14 @@ class OtpActivity : AppCompatActivity() {
                 timer.setTextColor(ContextCompat.getColor(this@OtpActivity, R.color.blue))
                 timer.isClickable = true
                 timer.setOnClickListener {
+                    viewModel.sendResetPasswordOtp(email)
                     resetCountdown()
                 }
             }
         }.start()
     }
     private fun resetCountdown() {
-        timeLeftInMillis = 30000
+        timeLeftInMillis = 60000
         val timer: TextView = findViewById(R.id.timer)
         timer.setTextColor(ContextCompat.getColor(this, R.color.otp))
         timer.isClickable = false
@@ -100,7 +176,7 @@ class OtpActivity : AppCompatActivity() {
 
 
     private fun validateOtp() {
-        val editTexts = listOf(firstEdt, secondEdt, threeEdt, fourEdt, fiveEdt)
+        val editTexts = listOf(firstEdt, secondEdt, threeEdt, fourEdt, fiveEdt, sixEdt)
 
         for (editText in editTexts) {
             val empty = editText.text.toString()
@@ -116,7 +192,7 @@ class OtpActivity : AppCompatActivity() {
     }
 
     private fun validateAllInputs() {
-        val editTexts = listOf(firstEdt, secondEdt, threeEdt, fourEdt, fiveEdt)
+        val editTexts = listOf(firstEdt, secondEdt, threeEdt, fourEdt, fiveEdt, sixEdt)
         var allFilled = true // Переменная для отслеживания заполненности всех полей
 
         // Проверяем каждое поле
@@ -145,7 +221,7 @@ class OtpActivity : AppCompatActivity() {
     }
 
     private fun addTextWatchers() {
-        val editTexts = listOf(firstEdt, secondEdt, threeEdt, fourEdt, fiveEdt)
+        val editTexts = listOf(firstEdt, secondEdt, threeEdt, fourEdt, fiveEdt, sixEdt)
 
         for (i in editTexts.indices) {
             editTexts[i].addTextChangedListener(object : TextWatcher {

@@ -5,16 +5,22 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.ocsapp.R
+import com.example.ocsapp.data.UserState
+import com.example.ocsapp.viewmodel.SupabaseAuthViewModel
 
 class NewPassActivity : AppCompatActivity() {
     private lateinit var btn_reset: Button
@@ -22,9 +28,42 @@ class NewPassActivity : AppCompatActivity() {
     private lateinit var passwordEditText: EditText
     private lateinit var confpassEditText: EditText
 
+    private var email: String = ""
+
+    private lateinit var progressBar: ProgressBar
+
+    private lateinit var viewModel: SupabaseAuthViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_pass)
+        email = intent.getStringExtra("email") ?: ""
+        viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
+        progressBar = findViewById(R.id.progressBar)
+        viewModel.userState.observe(this) { userState ->
+            when (userState) {
+                is UserState.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                }
+
+                is UserState.Success -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, userState.message, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AuthActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+
+                is UserState.Error -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, userState.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+
+
+
         val back: ImageButton = findViewById(R.id.back)
         val login: TextView = findViewById(R.id.login)
 
@@ -66,9 +105,7 @@ class NewPassActivity : AppCompatActivity() {
         }
 
         btn_reset.setOnClickListener {
-            val intent = Intent(this, AuthActivity::class.java)
-            startActivity(intent)
-            finish()
+            viewModel.updatePassword(email, confpassEditText.text.toString())
         }
 
     }

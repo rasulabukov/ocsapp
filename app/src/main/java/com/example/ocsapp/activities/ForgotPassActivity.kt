@@ -5,30 +5,65 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.ocsapp.R
+import com.example.ocsapp.data.State
+import com.example.ocsapp.data.UserState
+import com.example.ocsapp.viewmodel.SupabaseAuthViewModel
 
 class ForgotPassActivity : AppCompatActivity() {
     private lateinit var emailEditText: EditText
     private lateinit var warningTextView: TextView
     private lateinit var btnForgot: Button
+    private lateinit var progressBar: ProgressBar
+
+    private lateinit var viewModel: SupabaseAuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_pass)
+        progressBar = findViewById(R.id.progressBar)
+        emailEditText = findViewById(R.id.email)
+
+        viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
+
+        viewModel.timer.observe(this) { State ->
+            when (State) {
+                is State.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                }
+
+                is State.Success -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, State.message, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, OtpActivity::class.java).apply {
+                        putExtra("email", emailEditText.text.toString())
+                    })
+                    finish()
+                }
+
+                is State.Error -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, State.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         val login: TextView = findViewById(R.id.login)
         btnForgot = findViewById(R.id.btn)
         val back: ImageButton = findViewById(R.id.back)
-        emailEditText = findViewById(R.id.email)
         warningTextView = findViewById(R.id.error)
 
         btnForgot.isEnabled = false
@@ -51,8 +86,7 @@ class ForgotPassActivity : AppCompatActivity() {
         }
 
         btnForgot.setOnClickListener {
-            val intent = Intent(this, OtpActivity::class.java)
-            startActivity(intent)
+            viewModel.sendResetPasswordOtp(emailEditText.text.toString())
         }
         back.setOnClickListener {
             finish()

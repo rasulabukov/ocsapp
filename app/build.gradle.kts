@@ -6,6 +6,11 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("C:\\Users\\mrgaa\\.android\\debug.keystore")
+        }
+    }
     namespace = "com.example.ocsapp"
     compileSdk = 34
 
@@ -51,6 +56,7 @@ dependencies {
     implementation("io.ktor:ktor-client-android:3.0.0")
     implementation("io.ktor:ktor-client-core:3.0.0")
 
+    implementation("androidx.credentials:credentials:1.3.0")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
 
     implementation(libs.androidx.core.ktx)

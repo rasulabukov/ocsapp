@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ocsapp.R
 import com.example.ocsapp.activities.AuthActivity
@@ -24,6 +25,7 @@ import com.example.ocsapp.activities.MainActivity
 import com.example.ocsapp.data.UserState
 import com.example.ocsapp.viewmodel.SupabaseAuthViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class SignUpFragment : Fragment() {
     private lateinit var firstNameEditText: EditText
@@ -67,11 +69,21 @@ class SignUpFragment : Fragment() {
                 }
 
                 is UserState.Success -> {
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), userState.message, Toast.LENGTH_SHORT).show()
-                    val intent = Intent(activity, MainActivity::class.java)
-                    startActivity(intent)
-                    activity?.finish()
+                    lifecycleScope.launch {
+                        val firstName = firstNameEditText.text.toString().trim()
+                        val lastName = lastNameEditText.text.toString().trim()
+                        val userEmail = emailEditText.text.toString().trim()
+                        val userPhone = phoneEditText.text.toString().trim()
+                        val avatar = ""
+
+                        viewModel.addUserToDatabase(firstName, lastName, userEmail, userPhone, avatar)
+
+                        progressBar.visibility = View.GONE
+                        Toast.makeText(requireContext(), userState.message, Toast.LENGTH_SHORT).show()
+                        val intent = Intent(activity, MainActivity::class.java)
+                        startActivity(intent)
+                        activity?.finish()
+                    }
                 }
 
                 is UserState.Error -> {
