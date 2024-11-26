@@ -13,6 +13,7 @@ import com.example.ocs.data.SharedPreferenceHelper
 import com.example.ocs.data.State
 import com.example.ocs.data.SupabaseClient.supabase
 import com.example.ocs.data.User
+import com.example.ocs.data.UserLoad
 import com.example.ocs.data.UserState
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -42,6 +43,9 @@ class SupabaseAuthViewModel : ViewModel() {
 
     private val _timer = MutableLiveData<State>()
     val timer: LiveData<State> get() = _timer
+
+    private val _userLoad = MutableLiveData<UserLoad>()
+    val userLoad: LiveData<UserLoad> get() = _userLoad
 
     fun signUp(
         context: Context,
@@ -120,7 +124,7 @@ class SupabaseAuthViewModel : ViewModel() {
 
     fun signInGoogle(context: Context) {
         viewModelScope.launch {
-            _userState.value = UserState.Loading
+            _userLoad.value = UserLoad.Loading
             try {
                 // Инициализация CredentialManager для Google Sign-In
                 val credentialManager = CredentialManager.create(context)
@@ -162,17 +166,16 @@ class SupabaseAuthViewModel : ViewModel() {
                 saveToken(context)
 
                 // Успешная регистрация
-                _userState.value = UserState.Success("Регистрация через Google прошла успешно.")
+                _userLoad.value = UserLoad.Success("Авторизация через Google прошла успешно.")
             } catch (e: GetCredentialException) {
                 // Обработка ошибки получения Google Sign-In данных
-                _userState.value = UserState.Error("Ошибка Google Sign-In: ${e.message}")
+                _userLoad.value = UserLoad.Error("Ошибка Google Sign-In: ${e.message}")
             } catch (e: RestException) {
                 // Обработка ошибки Supabase
-                _userState.value = UserState.Error("Ошибка Supabase: ${e.message}")
-                Log.e("err","Ошибка Supabase: ${e.message}")
+                _userLoad.value = UserLoad.Error("Ошибка Supabase: ${e.message}")
             } catch (e: Exception) {
                 // Обработка всех других ошибок
-                _userState.value = UserState.Error("Неизвестная ошибка: ${e.message}")
+                _userLoad.value = UserLoad.Error("Неизвестная ошибка: ${e.message}")
             }
         }
     }
@@ -243,6 +246,8 @@ class SupabaseAuthViewModel : ViewModel() {
             }
         }
     }
+
+
 
     fun isUserLoggedIn(context: Context) {
         viewModelScope.launch {

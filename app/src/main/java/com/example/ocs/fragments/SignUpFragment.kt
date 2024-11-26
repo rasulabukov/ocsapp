@@ -22,6 +22,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.ocs.R
 import com.example.ocs.activities.AuthActivity
 import com.example.ocs.activities.MainActivity
+import com.example.ocs.data.UserLoad
 import com.example.ocs.data.UserState
 import com.example.ocs.viewmodel.SupabaseAuthViewModel
 import kotlinx.coroutines.launch
@@ -88,6 +89,27 @@ class SignUpFragment : Fragment() {
                 is UserState.Error -> {
                     progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), userState.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        viewModel.userLoad.observe(viewLifecycleOwner) { userLoad ->
+            when (userLoad) {
+                is UserLoad.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                }
+
+                is UserLoad.Success -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), userLoad.message, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(activity, MainActivity::class.java)
+                    startActivity(intent)
+                    activity?.finish()
+                }
+
+                is UserLoad.Error -> {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), userLoad.errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
         }

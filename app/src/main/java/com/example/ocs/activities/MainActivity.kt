@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.ocs.R
+import com.example.ocs.data.SupabaseClient.supabase
 import com.example.ocs.data.UserState
 import com.example.ocs.fragments.CartFragment
 import com.example.ocs.fragments.ContactFragment
@@ -29,6 +30,7 @@ import com.example.ocs.fragments.SettingsFragment
 import com.example.ocs.viewmodel.SupabaseAuthViewModel
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
+import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,6 +40,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
     private lateinit var headerName: TextView
+    private lateinit var headerEmail: TextView
+    private lateinit var headerAva: CircleImageView
     private lateinit var viewModel: SupabaseAuthViewModel
 
     private lateinit var headerCont: RelativeLayout
@@ -48,26 +52,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
         viewModel.isUserLoggedIn(this)
-
-        navView = findViewById(R.id.navigation_view)
-        drawerLayout = findViewById<DrawerLayout>(R.id.main)
-        val headerView = navView.getHeaderView(0)
-
-        val headerAva: CircleImageView = headerView.findViewById(R.id.ava)
-        headerCont = headerView.findViewById(R.id.cont_profile)
-        headerButton = headerView.findViewById(R.id.login_btn)
-
-        headerName = headerView.findViewById(R.id.name)
-
-        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        navView.setNavigationItemSelectedListener(this)
-
-        val toogle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close)
-        drawerLayout.addDrawerListener(toogle)
-        toogle.syncState()
-
 
         viewModel.userState.observe(this) { userState ->
             when (userState) {
@@ -86,7 +70,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
+        navView = findViewById(R.id.navigation_view)
+        drawerLayout = findViewById<DrawerLayout>(R.id.main)
+        val headerView = navView.getHeaderView(0)
 
+        headerAva = headerView.findViewById(R.id.ava)
+        headerCont = headerView.findViewById(R.id.cont_profile)
+        headerButton = headerView.findViewById(R.id.login_btn)
+
+        headerName = headerView.findViewById(R.id.name)
+        headerEmail = headerView.findViewById(R.id.email)
+
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        navView.setNavigationItemSelectedListener(this)
+
+        val toogle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close)
+        drawerLayout.addDrawerListener(toogle)
+        toogle.syncState()
 
         headerCont.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
