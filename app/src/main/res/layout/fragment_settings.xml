@@ -41,7 +41,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_person_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -58,7 +58,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_lock_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -75,7 +75,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_security_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -92,7 +92,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_share_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -109,7 +109,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_language_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -148,7 +148,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_delete_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -165,7 +165,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_storage_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -182,7 +182,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_data_usage_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -200,7 +200,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/baseline_notifications_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -239,7 +239,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_flag_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -256,7 +256,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_contact_support_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -273,7 +273,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_info_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -314,7 +314,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/rounded_change_circle_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 
@@ -331,7 +331,7 @@
                 android:drawableEnd="@drawable/baseline_navigate_next_24"
                 android:drawableStart="@drawable/baseline_logout_24"
                 android:paddingBottom="12dp"
-                android:background="@drawable/clickable_bg"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/TEXT"
                 />
 

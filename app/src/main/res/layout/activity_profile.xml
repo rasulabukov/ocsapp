@@ -133,7 +133,7 @@
                         android:drawablePadding="15dp"
                         android:drawableStart="@drawable/outline_payment_24"
                         android:paddingBottom="12dp"
-                        android:background="@drawable/clickable_bg"
+                        android:background="?android:attr/selectableItemBackground"
                         style="@style/TEXT"
                         />
 
@@ -148,7 +148,7 @@
                         android:drawablePadding="15dp"
                         android:drawableStart="@drawable/outline_monetization_on_24"
                         android:paddingBottom="12dp"
-                        android:background="@drawable/clickable_bg"
+                        android:background="?android:attr/selectableItemBackground"
                         style="@style/TEXT"
                         />
 
@@ -164,7 +164,7 @@
                         android:drawableStart="@drawable/outline_admin_panel_settings_24"
                         android:paddingBottom="12dp"
                         android:visibility="gone"
-                        android:background="@drawable/clickable_bg"
+                        android:background="?android:attr/selectableItemBackground"
                         style="@style/TEXT"
                         />
 
@@ -180,7 +180,7 @@
                         android:drawablePadding="15dp"
                         android:drawableStart="@drawable/baseline_notes_24"
                         android:paddingBottom="12dp"
-                        android:background="@drawable/clickable_bg"
+                        android:background="?android:attr/selectableItemBackground"
                         style="@style/TEXT"
                         android:drawableEnd="@drawable/baseline_navigate_next_24"
                         />

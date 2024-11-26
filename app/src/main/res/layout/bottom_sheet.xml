@@ -23,7 +23,7 @@
         android:drawablePadding="15dp"
         android:drawableStart="@drawable/baseline_delete_outline_24"
         android:paddingBottom="12dp"
-        android:background="@drawable/clickable_bg"
+        android:background="?android:attr/selectableItemBackground"
         android:textColor="#FF0000"
         />
 
