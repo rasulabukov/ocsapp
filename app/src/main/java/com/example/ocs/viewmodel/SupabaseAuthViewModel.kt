@@ -287,4 +287,6 @@ class SupabaseAuthViewModel : ViewModel() {
             Log.d("error","Ошибка базы данных: ${e.message}")
         }
     }
+
+
 }

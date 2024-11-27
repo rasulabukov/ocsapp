@@ -56,8 +56,9 @@
 
             <EditText
                 android:id="@+id/fname"
-                android:layout_width="140dp"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
+                android:layout_weight="1"
                 android:background="@drawable/bg_google"
                 android:hint="First Name"
                 android:inputType="textPersonName"
@@ -68,8 +69,9 @@
 
             <EditText
                 android:id="@+id/lname"
-                android:layout_width="140dp"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
+                android:layout_weight="1"
                 android:background="@drawable/bg_google"
                 android:hint="Last Name"
                 android:inputType="textPersonName"

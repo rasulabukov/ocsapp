@@ -63,20 +63,21 @@
 
         <EditText
             android:id="@+id/firstEdt"
-            android:layout_width="57dp"
+            android:layout_width="0dp"
             android:layout_height="57dp"
+            android:layout_weight="1"
             android:background="@drawable/bg_google"
             android:inputType="number"
             android:maxLength="1"
             style="@style/TEXT"
-            android:layout_marginStart="5dp"
             android:textAlignment="center"
             android:textSize="30sp" />
 
         <EditText
             android:id="@+id/secondEdt"
-            android:layout_width="57dp"
+            android:layout_width="0dp"
             android:layout_height="57dp"
+            android:layout_weight="1"
             android:background="@drawable/bg_google"
             android:inputType="number"
             android:maxLength="1"
@@ -87,8 +88,9 @@
 
         <EditText
             android:id="@+id/threeEdt"
-            android:layout_width="57dp"
+            android:layout_width="0dp"
             android:layout_height="57dp"
+            android:layout_weight="1"
             android:background="@drawable/bg_google"
             android:inputType="number"
             android:maxLength="1"
@@ -99,8 +101,9 @@
 
         <EditText
             android:id="@+id/fourEdt"
-            android:layout_width="57dp"
+            android:layout_width="0dp"
             android:layout_height="57dp"
+            android:layout_weight="1"
             android:background="@drawable/bg_google"
             android:inputType="number"
             android:maxLength="1"
@@ -111,8 +114,9 @@
 
         <EditText
             android:id="@+id/fiveEdt"
-            android:layout_width="57dp"
+            android:layout_width="0dp"
             android:layout_height="57dp"
+            android:layout_weight="1"
             android:background="@drawable/bg_google"
             android:inputType="number"
             android:maxLength="1"
@@ -123,8 +127,9 @@
 
         <EditText
             android:id="@+id/sixEdt"
-            android:layout_width="57dp"
+            android:layout_width="0dp"
             android:layout_height="57dp"
+            android:layout_weight="1"
             android:background="@drawable/bg_google"
             android:inputType="number"
             android:maxLength="1"

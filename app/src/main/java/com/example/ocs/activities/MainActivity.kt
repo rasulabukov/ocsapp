@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.ocs.R
 import com.example.ocs.data.SupabaseClient.supabase
+import com.example.ocs.data.User
 import com.example.ocs.data.UserState
 import com.example.ocs.fragments.CartFragment
 import com.example.ocs.fragments.ContactFragment
@@ -31,6 +32,7 @@ import com.example.ocs.viewmodel.SupabaseAuthViewModel
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -120,6 +122,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun loadUserInfo() {
         CoroutineScope(Dispatchers.IO).launch {
+            val user = supabase.auth.currentUserOrNull()
+            val city = supabase.from("users").select().decodeSingle<User>()
 
         }
     }
