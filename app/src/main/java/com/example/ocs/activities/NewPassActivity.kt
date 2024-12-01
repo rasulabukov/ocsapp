@@ -102,6 +102,7 @@ class NewPassActivity : AppCompatActivity() {
 
         btn_reset.setOnClickListener {
             viewModel.updatePassword(email, confpassEditText.text.toString())
+            viewModel.updatePasswordToDatabase(confpassEditText.text.toString())
         }
 
     }

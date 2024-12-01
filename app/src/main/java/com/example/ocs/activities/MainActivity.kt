@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
@@ -21,8 +20,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.ocs.R
-import com.example.ocs.data.SupabaseClient.supabase
-import com.example.ocs.data.User
 import com.example.ocs.data.UserState
 import com.example.ocs.fragments.CartFragment
 import com.example.ocs.fragments.ContactFragment
@@ -32,9 +29,6 @@ import com.example.ocs.fragments.SettingsFragment
 import com.example.ocs.viewmodel.SupabaseAuthViewModel
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.postgrest.query.Columns
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -113,17 +107,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (isLoggedIn) {
             headerCont.visibility = View.VISIBLE
             headerButton.visibility = View.GONE
+            navView.menu.findItem(R.id.logout).isVisible = true
         } else {
             headerCont.visibility = View.GONE
             headerButton.visibility = View.VISIBLE
+            navView.menu.findItem(R.id.logout).isVisible = false
         }
     }
 
     private fun loadUserInfo() {
-        viewModel.loadUserInfo(this) { firstName ->
+        viewModel.loadUserInfo(this, { firstName ->
             // Обновляем TextView с именем пользователя
             headerName.text = firstName
-        }
+
+        }, { email ->
+            headerEmail.text = email
+        })
     }
 
 

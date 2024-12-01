@@ -74,9 +74,10 @@ class SignUpFragment : Fragment() {
                         val lastName = lastNameEditText.text.toString().trim()
                         val userEmail = emailEditText.text.toString().trim()
                         val userPhone = phoneEditText.text.toString().trim()
+                        val password = passwordEditText.text.toString().trim()
                         val avatar = ""
 
-                        viewModel.addUserToDatabase(firstName, lastName, userEmail, userPhone, avatar)
+                        viewModel.addUserToDatabase(firstName, lastName, userEmail, userPhone, password, avatar)
 
                         progressBar.visibility = View.GONE
                         Toast.makeText(requireContext(), userState.message, Toast.LENGTH_SHORT).show()
@@ -188,10 +189,10 @@ class SignUpFragment : Fragment() {
         val email = emailEditText.text.toString()
         val phone = phoneEditText.text.toString()
         val password = passwordEditText.text.toString()
-        val profileimage = ""
+        val avatar = ""
 
 
-        viewModel.signUp(requireContext(), firstname, lastname, email, phone, password, profileimage)
+        viewModel.signUp(requireContext(), firstname, lastname, email, phone, password, avatar)
 
     }
 

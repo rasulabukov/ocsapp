@@ -157,6 +157,7 @@ class SupabaseAuthViewModel : ViewModel() {
                     GoogleIdTokenCredential.createFrom(result.credential.data)
                 val googleIdToken = googleIdTokenCredential.idToken
 
+
                 supabase.auth.signInWith(IDToken) {
                     idToken = googleIdToken
                     provider = Google
@@ -233,20 +234,24 @@ class SupabaseAuthViewModel : ViewModel() {
         }
     }
 
+    fun updatePasswordToDatabase(newPassword: String) {
+        viewModelScope.launch {
+            val user = supabase.auth.currentUserOrNull()?.id
+            val newPass = mapOf("password" to newPassword)
+            supabase.from("users").update(newPass) {
+                filter {
+                    User::user_id eq user
+                }
+            }.decodeSingle<User>()
+        }
+    }
 
 
     fun logout() {
         viewModelScope.launch {
-            _userState.value = UserState.Loading
-            try {
-                supabase.auth.signOut()
-                _userState.value = UserState.Success("Вы вышли из аккаунта")
-            } catch (e: Exception) {
-                _userState.value = UserState.Error("Ошибка: ${e.message}")
-            }
+            supabase.auth.signOut()
         }
     }
-
 
 
     fun isUserLoggedIn(context: Context) {
@@ -268,23 +273,73 @@ class SupabaseAuthViewModel : ViewModel() {
         }
     }
 
-    fun loadUserInfo(context: Context, onNameLoaded: (String) -> Unit) {
+
+    fun loadUserInfo(context: Context, onNameLoaded: (String) -> Unit, onEmailLoaded: (String) -> Unit) {
         viewModelScope.launch {
             val user = supabase.auth.currentUserOrNull()?.id
-            val response = supabase.from("users").select(columns = Columns.list("firstname", "lastname")) {
+            val response = supabase.from("users").select(columns = Columns.list("user_id", "firstname", "lastname", "email", "phone")) {
                 filter {
                     User::user_id eq user
                 }
-
-            }
-            val userData = response.data
-            val firstName = userData[0].toString()
-            Log.d("User", firstName)
-            onNameLoaded(firstName)
+            }.decodeSingle<User>()
+            val firstname = response.firstname
+            val lastname = response.lastname
+            val userData = "$firstname $lastname"
+            val emailData = response.email
+            onNameLoaded(userData)
+            onEmailLoaded(emailData.toString())
 
     }}
 
-    suspend fun addUserToDatabase(firstName: String, lastName: String, userEmail: String, userPhone: String, avatar: String) {
+    fun loadUserInfoEditActivity(context: Context, onNameLoaded: (String) -> Unit, onLastNameLoaded: (String) -> Unit, onEmailLoaded: (String) -> Unit, onPhoneLoaded: (String) -> Unit, onGenderLoaded: (String) -> Unit) {
+        viewModelScope.launch {
+            val user = supabase.auth.currentUserOrNull()?.id
+            val response = supabase.from("users").select(columns = Columns.list("user_id", "firstname", "lastname", "email", "phone", "gender")) {
+                filter {
+                    User::user_id eq user
+                }
+            }.decodeSingle<User>()
+            val firstname = response.firstname
+            val lastname = response.lastname
+            val emailData = response.email
+            val phoneData = response.phone
+            val gender = response.gender
+
+            onNameLoaded(firstname.toString())
+            onLastNameLoaded(lastname.toString())
+            onEmailLoaded(emailData.toString())
+            onPhoneLoaded(phoneData.toString())
+            onGenderLoaded(gender.toString())
+
+        }}
+
+    fun deleteUserToDatabase(context: Context) {
+        viewModelScope.launch {
+            val user = supabase.auth.currentUserOrNull()?.id
+            supabase.from("users").delete {
+                filter {
+                    User::user_id eq user
+                }
+            }.decodeSingle<User>()
+
+        }}
+
+
+    fun editUserInfo(context: Context, firstName: String, lastName: String, userPhone: String, userEmail: String) {
+        viewModelScope.launch {
+
+
+            supabase.auth.updateUser {
+                email = userEmail
+                data = buildJsonObject {
+                    put("display_name", "$firstName $lastName")
+                    phone = userPhone
+                }
+            }
+            
+        }}
+
+    suspend fun addUserToDatabase(firstName: String, lastName: String, userEmail: String, userPhone: String, password: String, avatar: String) {
         try {
             val newUser = mapOf(
 
@@ -292,6 +347,7 @@ class SupabaseAuthViewModel : ViewModel() {
                 "lastname" to lastName,
                 "email" to userEmail,
                 "phone" to userPhone,
+                "password" to password,
                 "avatar" to avatar
             )
 
@@ -304,4 +360,36 @@ class SupabaseAuthViewModel : ViewModel() {
         }
     }
 
+    suspend fun editUserToDatabase(firstName: String, lastName: String, userEmail: String, userPhone: String, avatar: String, gender: String) {
+
+        val user = supabase.auth.currentUserOrNull()?.id
+        val newUser = mapOf(
+
+            "firstname" to firstName,
+            "lastname" to lastName,
+            "email" to userEmail,
+            "phone" to userPhone,
+            "avatar" to avatar,
+            "gender" to gender
+        )
+
+        supabase.postgrest["users"].update(newUser){
+            filter {
+                User::user_id eq user
+            }
+        }
+
+    }
+
+    fun deleteUser() {
+        viewModelScope.launch {
+            val user = supabase.auth.currentUserOrNull()?.id
+            supabase.auth.admin.deleteUser(user.toString())
+
+        }
+
+    }
+
 }
+
+
