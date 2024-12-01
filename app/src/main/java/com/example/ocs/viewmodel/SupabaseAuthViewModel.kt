@@ -2,6 +2,7 @@ package com.example.ocs.viewmodel
 
 import android.content.Context
 import android.util.Log
+import android.widget.TextView
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
@@ -17,17 +18,16 @@ import com.example.ocs.data.UserLoad
 import com.example.ocs.data.UserState
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.auth.providers.builtin.IDToken
 import io.github.jan.supabase.exceptions.RestException
+import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
+import io.github.jan.supabase.postgrest.query.Columns
+import io.ktor.util.decodeBase64String
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -268,6 +268,22 @@ class SupabaseAuthViewModel : ViewModel() {
         }
     }
 
+    fun loadUserInfo(context: Context, onNameLoaded: (String) -> Unit) {
+        viewModelScope.launch {
+            val user = supabase.auth.currentUserOrNull()?.id
+            val response = supabase.from("users").select(columns = Columns.list("firstname", "lastname")) {
+                filter {
+                    User::user_id eq user
+                }
+
+            }
+            val userData = response.data
+            val firstName = userData[0].toString()
+            Log.d("User", firstName)
+            onNameLoaded(firstName)
+
+    }}
+
     suspend fun addUserToDatabase(firstName: String, lastName: String, userEmail: String, userPhone: String, avatar: String) {
         try {
             val newUser = mapOf(
@@ -287,6 +303,5 @@ class SupabaseAuthViewModel : ViewModel() {
             Log.d("error","Ошибка базы данных: ${e.message}")
         }
     }
-
 
 }
