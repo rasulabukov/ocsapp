@@ -181,7 +181,6 @@ class SupabaseAuthViewModel : ViewModel() {
         }
     }
 
-
     fun sendResetPasswordOtp(userEmail: String) {
         viewModelScope.launch {
             _timer.value = State.Loading
@@ -313,18 +312,6 @@ class SupabaseAuthViewModel : ViewModel() {
 
         }}
 
-    fun deleteUserToDatabase(context: Context) {
-        viewModelScope.launch {
-            val user = supabase.auth.currentUserOrNull()?.id
-            supabase.from("users").delete {
-                filter {
-                    User::user_id eq user
-                }
-            }.decodeSingle<User>()
-
-        }}
-
-
     fun editUserInfo(context: Context, firstName: String, lastName: String, userPhone: String, userEmail: String) {
         viewModelScope.launch {
 
@@ -339,7 +326,7 @@ class SupabaseAuthViewModel : ViewModel() {
             
         }}
 
-    suspend fun addUserToDatabase(firstName: String, lastName: String, userEmail: String, userPhone: String, password: String, avatar: String) {
+    suspend fun addUserToDatabase(firstName: String, lastName: String, userEmail: String, userPhone: String, password: String) {
         try {
             val newUser = mapOf(
 
@@ -348,7 +335,6 @@ class SupabaseAuthViewModel : ViewModel() {
                 "email" to userEmail,
                 "phone" to userPhone,
                 "password" to password,
-                "avatar" to avatar
             )
 
             supabase.postgrest["users"].upsert(newUser)
@@ -360,7 +346,7 @@ class SupabaseAuthViewModel : ViewModel() {
         }
     }
 
-    suspend fun editUserToDatabase(firstName: String, lastName: String, userEmail: String, userPhone: String, avatar: String, gender: String) {
+    suspend fun editUserToDatabase(firstName: String, lastName: String, userEmail: String, userPhone: String, gender: String) {
 
         val user = supabase.auth.currentUserOrNull()?.id
         val newUser = mapOf(
@@ -369,7 +355,6 @@ class SupabaseAuthViewModel : ViewModel() {
             "lastname" to lastName,
             "email" to userEmail,
             "phone" to userPhone,
-            "avatar" to avatar,
             "gender" to gender
         )
 
@@ -381,6 +366,19 @@ class SupabaseAuthViewModel : ViewModel() {
 
     }
 
+    suspend fun updateUserAvatar(context: Context, imageUrl: String){
+        val userId = supabase.auth.currentUserOrNull()?.id // Вам нужно реализовать этот метод для получения ID пользователя
+
+        val userUpdates = mapOf("avatar" to imageUrl)
+
+        supabase.from("users").update(userUpdates){
+
+            filter {
+                User::user_id eq userId
+            }
+        }
+    }
+
     fun deleteUser() {
         viewModelScope.launch {
             val user = supabase.auth.currentUserOrNull()?.id
@@ -389,6 +387,17 @@ class SupabaseAuthViewModel : ViewModel() {
         }
 
     }
+
+    fun deleteUserToDatabase(context: Context) {
+        viewModelScope.launch {
+            val user = supabase.auth.currentUserOrNull()?.id
+            supabase.from("users").delete {
+                filter {
+                    User::user_id eq user
+                }
+            }.decodeSingle<User>()
+
+        }}
 
 }
 

@@ -3,7 +3,9 @@ package com.example.ocs.activities
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
@@ -16,10 +18,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.ocs.R
+import com.example.ocs.data.SupabaseClient.supabase
+import com.example.ocs.data.User
 import com.example.ocs.data.UserState
 import com.example.ocs.viewmodel.SupabaseAuthViewModel
 import de.hdodenhof.circleimageview.CircleImageView
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.launch
 
 class EditProfileActivity : AppCompatActivity() {
@@ -33,7 +42,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var men: RadioButton
     private lateinit var woman: RadioButton
     private lateinit var viewModel: SupabaseAuthViewModel
-
+    private var selectedImageUri: Uri? = null
     private lateinit var genderState: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,9 +114,11 @@ class EditProfileActivity : AppCompatActivity() {
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
             data?.data?.let { uri ->
                 ava.setImageURI(uri)
+                selectedImageUri = uri
             }
         }
     }
+
 
     companion object {
         private const val STORAGE_PERMISSION_CODE = 101
@@ -131,6 +142,41 @@ class EditProfileActivity : AppCompatActivity() {
                 else -> gender.clearCheck()
             }
         })
+
+        lifecycleScope.launch {
+            try {
+                val userId = supabase.auth.currentUserOrNull()?.id
+
+                // Проверяем, есть ли текущий пользователь
+                if (userId != null) {
+                    val response = supabase.from("users").select(columns = Columns.raw("avatar")) {
+                        filter {
+                            User::user_id eq userId
+                        }
+                    }.decodeSingle<Map<String, String>>()
+
+                    // Проверяем, существует ли поле avatar и не пустое ли оно
+                    val avatarUrl = response["avatar"]
+                    if (!avatarUrl.isNullOrEmpty()) {
+                        Glide.with(this@EditProfileActivity)
+                            .load(avatarUrl)
+                            .placeholder(R.drawable.ava) // Изображение по умолчанию
+                            .error(R.drawable.ava)       // Если загрузка не удалась
+                            .into(ava)
+                    } else {
+                        // Загружаем изображение по умолчанию, если avatar пустой
+                        ava.setImageResource(R.drawable.ava)
+                    }
+                } else {
+                    // Устанавливаем аватар по умолчанию, если пользователь не найден
+                    ava.setImageResource(R.drawable.ava)
+                }
+            } catch (e: Exception) {
+                // Обрабатываем возможные ошибки
+                Toast.makeText(this@EditProfileActivity, "${e.message}", Toast.LENGTH_SHORT).show()
+                ava.setImageResource(R.drawable.ava) // Устанавливаем изображение по умолчанию
+            }
+        }
     }
 
     private fun EditUserInfo() {
@@ -156,12 +202,80 @@ class EditProfileActivity : AppCompatActivity() {
                     lastnameEdt.text.toString(),
                     emailEdt.text.toString(),
                     phoneEdt.text.toString(),
-                    "",
                     genderState
                 )
+                if (selectedImageUri != null) {
+                    uploadImageToSupabase(selectedImageUri!!)
+                } else {
+                    finish()
+                    Toast.makeText(this@EditProfileActivity, "Данные успешно изменены", Toast.LENGTH_SHORT).show()
+                }
             }
-            finish()
 
+        }
+
+    }
+
+    private fun uploadImageToSupabase(uri: Uri) {
+        val bucketName = "avatars"
+        val fileName = "${System.currentTimeMillis()}.jpg"
+
+        val inputStream = contentResolver.openInputStream(uri)
+        inputStream?.let {
+
+            val byteArray = it.readBytes()
+
+            lifecycleScope.launch {
+                try {
+                    // Получаем текущий аватар пользователя
+                    val userId = supabase.auth.currentUserOrNull()?.id
+                    val currentAvatarUrl = getCurrentAvatarUrl(userId)
+
+                    // Удаляем старую аватарку, если она существует
+                    if (!currentAvatarUrl.isNullOrEmpty() && currentAvatarUrl.contains(bucketName)) {
+                        val oldFileName = currentAvatarUrl.substringAfterLast("/")
+                        supabase.storage.from(bucketName).delete(oldFileName)
+                    }
+
+                    // Загружаем новую аватарку
+                    supabase.storage.from(bucketName).upload(fileName, byteArray)
+
+                    // Получаем публичный URL новой аватарки
+                    val newImageUrl = supabase.storage.from(bucketName).publicUrl(fileName)
+
+                    // Обновляем URL в базе данных
+                    updateAvatarUrl(newImageUrl)
+
+                    Toast.makeText(this@EditProfileActivity, "Аватарка успешно обновлена", Toast.LENGTH_SHORT).show()
+                    finish()
+                } catch (e: Exception) {
+                    Toast.makeText(this@EditProfileActivity, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private suspend fun getCurrentAvatarUrl(userId: String?): String? {
+        return try {
+            if (userId == null) return null
+            val response = supabase.from("users").select(columns = Columns.raw("avatar")) {
+                filter {
+                    User::user_id eq userId
+                }
+            }.decodeSingle<Map<String, String>>()
+
+            response["avatar"]
+        } catch (e: Exception) {
+            Toast.makeText(this@EditProfileActivity, "${e.message}", Toast.LENGTH_SHORT).show()
+            null
+        }
+    }
+
+
+
+    private fun updateAvatarUrl(imageUrl: String) {
+        lifecycleScope.launch {
+            viewModel.updateUserAvatar(this@EditProfileActivity, imageUrl)
         }
 
     }

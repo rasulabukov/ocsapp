@@ -77,7 +77,7 @@ class SignUpFragment : Fragment() {
                         val password = passwordEditText.text.toString().trim()
                         val avatar = ""
 
-                        viewModel.addUserToDatabase(firstName, lastName, userEmail, userPhone, password, avatar)
+                        viewModel.addUserToDatabase(firstName, lastName, userEmail, userPhone, password)
 
                         progressBar.visibility = View.GONE
                         Toast.makeText(requireContext(), userState.message, Toast.LENGTH_SHORT).show()

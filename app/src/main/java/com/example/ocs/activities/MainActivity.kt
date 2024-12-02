@@ -19,7 +19,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.ocs.R
+import com.example.ocs.data.SupabaseClient.supabase
+import com.example.ocs.data.User
 import com.example.ocs.data.UserState
 import com.example.ocs.fragments.CartFragment
 import com.example.ocs.fragments.ContactFragment
@@ -29,6 +33,10 @@ import com.example.ocs.fragments.SettingsFragment
 import com.example.ocs.viewmodel.SupabaseAuthViewModel
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -116,13 +124,55 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun loadUserInfo() {
-        viewModel.loadUserInfo(this, { firstName ->
-            // Обновляем TextView с именем пользователя
-            headerName.text = firstName
+        lifecycleScope.launch {
+            try {
+                val userId = supabase.auth.currentUserOrNull()?.id
 
-        }, { email ->
-            headerEmail.text = email
-        })
+                if (userId != null) {
+                    // Запрашиваем данные пользователя из базы
+                    val response = supabase.from("users").select(
+                        columns = Columns.raw("firstname, lastname, email, avatar")
+                    ) {
+                        filter {
+                            User::user_id eq userId
+                        }
+                    }.decodeSingle<Map<String, String>>()
+
+                    // Получаем данные пользователя
+                    val firstName = response["firstname"] ?: ""
+                    val lastName = response["lastname"] ?: ""
+                    val email = response["email"] ?: ""
+                    val avatarUrl = response["avatar"]
+
+                    // Устанавливаем имя и фамилию
+                    headerName.text = "$firstName $lastName"
+
+                    // Устанавливаем email
+                    headerEmail.text = email
+
+                    // Загружаем аватарку, если она есть
+                    if (!avatarUrl.isNullOrEmpty()) {
+                        Glide.with(this@MainActivity)
+                            .load(avatarUrl)
+                            .placeholder(R.drawable.ava) // Изображение по умолчанию
+                            .error(R.drawable.ava)       // Если загрузка не удалась
+                            .into(headerAva)
+                    } else {
+                        headerAva.setImageResource(R.drawable.ava) // Устанавливаем изображение по умолчанию
+                    }
+                } else {
+                    // Если пользователь не найден, показываем заглушки
+                    headerName.text = "Гость"
+                    headerEmail.text = "example@example.com"
+                    headerAva.setImageResource(R.drawable.ava)
+                }
+            } catch (e: Exception) {
+                // Обработка ошибок
+                headerName.text = "Гость"
+                headerEmail.text = "example@example.com"
+                headerAva.setImageResource(R.drawable.ava)
+            }
+        }
     }
 
 

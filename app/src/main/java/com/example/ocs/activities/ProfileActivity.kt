@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.ocs.R
 import com.example.ocs.data.SupabaseClient.supabase
 import com.example.ocs.data.User
@@ -125,8 +126,6 @@ class ProfileActivity : AppCompatActivity() {
 
                 btnOk.setOnClickListener {
                     if (passEdt.text.isNotEmpty() && passEdt.text.toString() == password){
-                        viewModel.deleteUserToDatabase(this@ProfileActivity)
-                        viewModel.deleteUser()
                         viewModel.logout()
                         Toast.makeText(this@ProfileActivity, "Аккаунт удалён", Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
@@ -199,6 +198,41 @@ class ProfileActivity : AppCompatActivity() {
         }, { Email ->
             email.text = Email
         })
+
+        lifecycleScope.launch {
+            try {
+                val userId = supabase.auth.currentUserOrNull()?.id
+
+                // Проверяем, есть ли текущий пользователь
+                if (userId != null) {
+                    val response = supabase.from("users").select(columns = Columns.raw("avatar")) {
+                        filter {
+                            User::user_id eq userId
+                        }
+                    }.decodeSingle<Map<String, String>>()
+
+                    // Проверяем, существует ли поле avatar и не пустое ли оно
+                    val avatarUrl = response["avatar"]
+                    if (!avatarUrl.isNullOrEmpty()) {
+                        Glide.with(this@ProfileActivity)
+                            .load(avatarUrl)
+                            .placeholder(R.drawable.ava) // Изображение по умолчанию
+                            .error(R.drawable.ava)       // Если загрузка не удалась
+                            .into(ava)
+                    } else {
+                        // Устанавливаем изображение по умолчанию, если avatar пустой
+                        ava.setImageResource(R.drawable.ava)
+                    }
+                } else {
+                    // Устанавливаем аватар по умолчанию, если пользователь не найден
+                    ava.setImageResource(R.drawable.ava)
+                }
+            } catch (e: Exception) {
+                // Обрабатываем возможные ошибки
+                Toast.makeText(this@ProfileActivity, "${e.message}", Toast.LENGTH_SHORT).show()
+                ava.setImageResource(R.drawable.ava) // Устанавливаем изображение по умолчанию
+            }
+        }
     }
 
     private fun AdminUser() {
