@@ -32,6 +32,7 @@ import com.example.ocs.fragments.FavouriteFragment
 import com.example.ocs.fragments.HomeFragment
 import com.example.ocs.fragments.SettingsFragment
 import com.example.ocs.viewmodel.SupabaseAuthViewModel
+import com.example.ocs.viewmodel.ToolbarViewModel
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
 import io.github.jan.supabase.auth.auth
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var headerEmail: TextView
     private lateinit var headerAva: CircleImageView
     private lateinit var viewModel: SupabaseAuthViewModel
+    private lateinit var toolbarViewModel: ToolbarViewModel
 
     private lateinit var headerCont: RelativeLayout
     private lateinit var headerButton: Button
@@ -55,6 +57,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(SupabaseAuthViewModel::class.java)
+        toolbarViewModel = ViewModelProvider(this).get(ToolbarViewModel::class.java)
         viewModel.isUserLoggedIn(this)
 
         viewModel.userState.observe(this) { userState ->
@@ -118,8 +121,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if(savedInstanceState == null){
             replaceFragment(HomeFragment())
             navView.setCheckedItem(R.id.home)
-            supportActionBar?.title = "Главная"
+            toolbarViewModel.setToolbarTitle("Главная")
         }
+
+        toolbarViewModel.toolbarTitle.observe(this) { title ->
+            supportActionBar?.title = title
+        }
+
+        supportActionBar?.title = toolbarViewModel.toolbarTitle.value
 
     }
 
@@ -141,49 +150,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             try {
                 val userId = supabase.auth.currentUserOrNull()?.id
 
-                if (userId != null) {
-                    // Запрашиваем данные пользователя из базы
-                    val response = supabase.from("users").select(
-                        columns = Columns.raw("firstname, lastname, email, avatar")
-                    ) {
-                        filter {
-                            User::user_id eq userId
-                        }
-                    }.decodeSingle<Map<String, String>>()
-
-                    // Получаем данные пользователя
-                    val firstName = response["firstname"] ?: ""
-                    val lastName = response["lastname"] ?: ""
-                    val email = response["email"] ?: ""
-                    val avatarUrl = response["avatar"]
-
-                    // Устанавливаем имя и фамилию
-                    headerName.text = "$firstName $lastName"
-
-                    // Устанавливаем email
-                    headerEmail.text = email
-
-                    // Загружаем аватарку, если она есть
-                    if (!avatarUrl.isNullOrEmpty()) {
-                        Glide.with(this@MainActivity)
-                            .load(avatarUrl)
-                            .placeholder(R.drawable.ava) // Изображение по умолчанию
-                            .error(R.drawable.ava)       // Если загрузка не удалась
-                            .into(headerAva)
-                    } else {
-                        headerAva.setImageResource(R.drawable.ava) // Устанавливаем изображение по умолчанию
+                // Запрашиваем данные пользователя из базы
+                val response = supabase.from("users").select(
+                    columns = Columns.raw("firstname, lastname, email, avatar")
+                ) {
+                    filter {
+                        User::user_id eq userId
                     }
+                }.decodeSingle<Map<String, String>>()
+
+                // Получаем данные пользователя
+                val firstName = response["firstname"] ?: ""
+                val lastName = response["lastname"] ?: ""
+                val email = response["email"] ?: ""
+                val avatarUrl = response["avatar"]
+
+                // Устанавливаем имя и фамилию
+                headerName.text = "$firstName $lastName"
+
+                // Устанавливаем email
+                headerEmail.text = email
+
+                // Загружаем аватарку, если она есть
+                if (!avatarUrl.isNullOrEmpty()) {
+                    Glide.with(this@MainActivity)
+                        .load(avatarUrl)
+                        .placeholder(R.drawable.ava) // Изображение по умолчанию
+                        .error(R.drawable.ava)       // Если загрузка не удалась
+                        .into(headerAva)
                 } else {
-                    // Если пользователь не найден, показываем заглушки
-                    headerName.text = "Гость"
-                    headerEmail.text = "example@example.com"
-                    headerAva.setImageResource(R.drawable.ava)
+                    headerAva.setImageResource(R.drawable.ava) // Устанавливаем изображение по умолчанию
                 }
+
             } catch (e: Exception) {
-                // Обработка ошибок
-                headerName.text = "Гость"
-                headerEmail.text = "example@example.com"
-                headerAva.setImageResource(R.drawable.ava)
+                Toast.makeText(this@MainActivity, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -194,23 +194,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId){
             R.id.home -> {
                 replaceFragment(HomeFragment())
-                supportActionBar?.title = "Главная"
+                toolbarViewModel.setToolbarTitle("Главная")
             }
             R.id.cart -> {
                 replaceFragment(CartFragment())
-                supportActionBar?.title = "Корзина"
+                toolbarViewModel.setToolbarTitle("Корзина")
             }
             R.id.fav -> {
                 replaceFragment(FavouriteFragment())
-                supportActionBar?.title = "Избранное"
+                toolbarViewModel.setToolbarTitle("Избранное")
             }
             R.id.settings -> {
                 replaceFragment(SettingsFragment())
-                supportActionBar?.title = "Настройки"
+                toolbarViewModel.setToolbarTitle("Настройки")
             }
             R.id.mess -> {
                 replaceFragment(ContactFragment())
-                supportActionBar?.title = "Контакты"
+                toolbarViewModel.setToolbarTitle("Контакты")
             }
             R.id.logout -> showDialog()
         }
