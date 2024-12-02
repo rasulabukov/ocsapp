@@ -207,6 +207,7 @@ class EditProfileActivity : AppCompatActivity() {
                 if (selectedImageUri != null) {
                     uploadImageToSupabase(selectedImageUri!!)
                 } else {
+                    startActivity(Intent(this@EditProfileActivity, ProfileActivity::class.java))
                     finish()
                     Toast.makeText(this@EditProfileActivity, "Данные успешно изменены", Toast.LENGTH_SHORT).show()
                 }
@@ -247,6 +248,7 @@ class EditProfileActivity : AppCompatActivity() {
                     updateAvatarUrl(newImageUrl)
 
                     Toast.makeText(this@EditProfileActivity, "Аватарка успешно обновлена", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@EditProfileActivity, ProfileActivity::class.java))
                     finish()
                 } catch (e: Exception) {
                     Toast.makeText(this@EditProfileActivity, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show()

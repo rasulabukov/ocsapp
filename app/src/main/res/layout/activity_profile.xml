@@ -8,6 +8,7 @@
     tools:context=".activities.ProfileActivity"
     style="@style/SCREEN">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,181 +20,188 @@
             android:layout_height="wrap_content"
             style="@style/SCREEN"/>
 
-        <RelativeLayout
-            android:id="@+id/main_cont"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ava"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/ava"
-                android:layout_marginTop="20dp"
-                android:layout_centerHorizontal="true" />
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:layout_centerHorizontal="true"
-                android:textSize="23sp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/ava"
-                style="@style/TEXT" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:layout_marginTop="5dp"
-                style="@style/TEXTAUTH"
-                android:id="@+id/emailTextview"
-                android:textColor="#878787"
-                android:layout_below="@id/name"
-                android:layout_centerHorizontal="true"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_button_login"
-                android:text="Редактировать профиль"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:id="@+id/editProfile"
-                android:layout_marginTop="20dp"
-                android:layout_below="@id/emailTextview"
-                android:layout_centerHorizontal="true"/>
-
-            <LinearLayout
-                android:id="@+id/balanscont"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@id/editProfile"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Баланс: "
-                    android:textStyle="bold"
-                    android:layout_marginTop="5dp"
-                    style="@style/TEXT"/>
-
-                <TextView
-                    android:id="@+id/balans"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1000"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/blue"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:layout_marginStart="10dp"
-                    android:id="@+id/toogle_balans"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
-            </LinearLayout>
-
-            <androidx.cardview.widget.CardView
+            <RelativeLayout
+                android:id="@+id/main_cont"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/balanscont"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="30dp">
+                android:layout_height="match_parent" >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ava"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ava"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_centerHorizontal="true"
+                    android:textSize="23sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/ava"
+                    style="@style/TEXT" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginTop="5dp"
+                    style="@style/TEXTAUTH"
+                    android:id="@+id/emailTextview"
+                    android:textColor="#878787"
+                    android:layout_below="@id/name"
+                    android:layout_centerHorizontal="true"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_login"
+                    android:text="Редактировать профиль"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:id="@+id/editProfile"
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@id/emailTextview"
+                    android:layout_centerHorizontal="true"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="20dp"
-                    android:orientation="vertical">
+                    android:id="@+id/balanscont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/editProfile"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Настройки"
+                        android:text="Баланс: "
                         android:textStyle="bold"
-                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        style="@style/TEXT"/>
+
+                    <TextView
+                        android:id="@+id/balans"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1000"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/blue"
-                        />
+                        android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:paddingTop="15dp"
-                        android:text="Способы оплаты"
-                        android:layout_marginTop="20dp"
-                        android:textSize="15sp"
-                        android:clickable="true"
-                        android:drawablePadding="15dp"
-                        android:drawableStart="@drawable/outline_payment_24"
-                        android:paddingBottom="12dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        style="@style/TEXT"
-                        />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:paddingTop="15dp"
-                        android:text="Валюта"
-                        android:layout_marginTop="5dp"
-                        android:textSize="15sp"
-                        android:clickable="true"
-                        android:drawablePadding="15dp"
-                        android:drawableStart="@drawable/outline_monetization_on_24"
-                        android:paddingBottom="12dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        style="@style/TEXT"
-                        />
-
-                    <TextView
-                        android:id="@+id/adminpanel"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:paddingTop="15dp"
-                        android:text="Админ панель"
-                        android:layout_marginTop="5dp"
-                        android:textSize="15sp"
-                        android:clickable="true"
-                        android:drawablePadding="15dp"
-                        android:drawableStart="@drawable/outline_admin_panel_settings_24"
-                        android:paddingBottom="12dp"
-                        android:visibility="gone"
-                        android:background="?android:attr/selectableItemBackground"
-                        style="@style/TEXT"
-                        />
-
-                    <TextView
-                        android:id="@+id/other"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:paddingTop="15dp"
-                        android:text="Другое"
-                        android:layout_marginTop="5dp"
-                        android:textSize="15sp"
-                        android:clickable="true"
-                        android:drawablePadding="15dp"
-                        android:drawableStart="@drawable/baseline_notes_24"
-                        android:paddingBottom="12dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        style="@style/TEXT"
-                        android:drawableEnd="@drawable/baseline_navigate_next_24"
-                        />
-
-
+                    <ImageButton
+                        android:layout_marginStart="10dp"
+                        android:id="@+id/toogle_balans"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" />
                 </LinearLayout>
 
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/balanscont"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="30dp">
 
-            </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Настройки"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:textColor="@color/blue"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:paddingTop="15dp"
+                            android:text="Способы оплаты"
+                            android:layout_marginTop="20dp"
+                            android:textSize="15sp"
+                            android:clickable="true"
+                            android:drawablePadding="15dp"
+                            android:drawableStart="@drawable/outline_payment_24"
+                            android:paddingBottom="12dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            style="@style/TEXT"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:paddingTop="15dp"
+                            android:text="Валюта"
+                            android:layout_marginTop="5dp"
+                            android:textSize="15sp"
+                            android:clickable="true"
+                            android:drawablePadding="15dp"
+                            android:drawableStart="@drawable/outline_monetization_on_24"
+                            android:paddingBottom="12dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            style="@style/TEXT"
+                            />
+
+                        <TextView
+                            android:id="@+id/adminpanel"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:paddingTop="15dp"
+                            android:text="Админ панель"
+                            android:layout_marginTop="5dp"
+                            android:textSize="15sp"
+                            android:clickable="true"
+                            android:drawablePadding="15dp"
+                            android:drawableStart="@drawable/outline_admin_panel_settings_24"
+                            android:paddingBottom="12dp"
+                            android:visibility="gone"
+                            android:background="?android:attr/selectableItemBackground"
+                            style="@style/TEXT"
+                            />
+
+                        <TextView
+                            android:id="@+id/other"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:paddingTop="15dp"
+                            android:text="Другое"
+                            android:layout_marginTop="5dp"
+                            android:textSize="15sp"
+                            android:clickable="true"
+                            android:drawablePadding="15dp"
+                            android:drawableStart="@drawable/baseline_notes_24"
+                            android:paddingBottom="12dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            style="@style/TEXT"
+                            android:drawableEnd="@drawable/baseline_navigate_next_24"
+                            />
 
 
-        </RelativeLayout>
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+
+            </RelativeLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
     </LinearLayout>

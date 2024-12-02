@@ -63,6 +63,8 @@
             android:layout_marginHorizontal="10dp"
             style="@style/TEXTAUTH"
             android:textSize="13sp"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:layout_marginTop="5dp"/>
 
 

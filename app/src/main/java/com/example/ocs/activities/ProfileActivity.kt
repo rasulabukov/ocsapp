@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.ocs.R
 import com.example.ocs.data.SupabaseClient.supabase
@@ -37,6 +38,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var name: TextView
     private lateinit var email: TextView
     private lateinit var adminpanel: TextView
+    private lateinit var refreshView: SwipeRefreshLayout
 
     private lateinit var viewModel: SupabaseAuthViewModel
 
@@ -54,6 +56,7 @@ class ProfileActivity : AppCompatActivity() {
         ava = findViewById(R.id.ava)
         name = findViewById(R.id.name)
         email = findViewById(R.id.emailTextview)
+        refreshView = findViewById(R.id.refresh)
         val otherTextView: TextView = findViewById(R.id.other)
         val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet, null)
 
@@ -62,14 +65,16 @@ class ProfileActivity : AppCompatActivity() {
         viewModel.userState.observe(this) { userState ->
             when (userState) {
                 is UserState.Loading -> {
-                    // Здесь можно показать прогресс
+                    refreshView.isRefreshing = true
                 }
 
                 is UserState.Success -> {
+                    refreshView.isRefreshing = false
                     Toast.makeText(this, userState.message, Toast.LENGTH_SHORT).show()
                 }
 
                 is UserState.Error -> {
+                    refreshView.isRefreshing = false
                     Toast.makeText(this, userState.errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -97,6 +102,9 @@ class ProfileActivity : AppCompatActivity() {
         }
         openDialogTextView.setOnClickListener {
             showCustomDialog()
+        }
+        refreshView.setOnRefreshListener {
+            loadUserInfo()
         }
 
     }
@@ -219,13 +227,16 @@ class ProfileActivity : AppCompatActivity() {
                             .placeholder(R.drawable.ava) // Изображение по умолчанию
                             .error(R.drawable.ava)       // Если загрузка не удалась
                             .into(ava)
+                        refreshView.isRefreshing = false
                     } else {
                         // Устанавливаем изображение по умолчанию, если avatar пустой
                         ava.setImageResource(R.drawable.ava)
+                        refreshView.isRefreshing = false
                     }
                 } else {
                     // Устанавливаем аватар по умолчанию, если пользователь не найден
                     ava.setImageResource(R.drawable.ava)
+                    refreshView.isRefreshing = false
                 }
             } catch (e: Exception) {
                 // Обрабатываем возможные ошибки

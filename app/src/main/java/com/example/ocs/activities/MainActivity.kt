@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.ocs.R
 import com.example.ocs.data.SupabaseClient.supabase
@@ -101,12 +102,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(Intent(this, AuthActivity::class.java))
         }
 
+        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerOpened(drawerView: View) {
+                // Вызывается, когда Drawer открыт
+                loadUserInfo()
+            }
+
+            override fun onDrawerClosed(drawerView: View) {}
+
+            override fun onDrawerStateChanged(newState: Int) {}
+        })
+
         if(savedInstanceState == null){
             replaceFragment(HomeFragment())
             navView.setCheckedItem(R.id.home)
             supportActionBar?.title = "Главная"
         }
-
 
     }
 
@@ -174,6 +187,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
