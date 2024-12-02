@@ -75,7 +75,6 @@ class SignUpFragment : Fragment() {
                         val userEmail = emailEditText.text.toString().trim()
                         val userPhone = phoneEditText.text.toString().trim()
                         val password = passwordEditText.text.toString().trim()
-                        val avatar = ""
 
                         viewModel.addUserToDatabase(firstName, lastName, userEmail, userPhone, password)
 

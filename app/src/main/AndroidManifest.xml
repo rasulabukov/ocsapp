@@ -16,6 +16,9 @@
         android:theme="@style/Theme.OCSapp"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ItemActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AdminActivity"
             android:exported="false" />
         <activity
