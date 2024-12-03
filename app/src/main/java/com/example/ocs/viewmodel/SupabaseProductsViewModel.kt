@@ -1,6 +1,5 @@
 package com.example.ocs.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,14 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.ocs.data.Product
 import com.example.ocs.data.ProductState
 import com.example.ocs.data.SupabaseClient.supabase
-import com.example.ocs.data.User
-import com.example.ocs.data.UserState
-import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SupabaseProductsViewModel(): ViewModel() {

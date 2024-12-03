@@ -1,5 +1,6 @@
 package com.example.ocs.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.ocs.R
+import com.example.ocs.activities.SearchActivity
 import com.example.ocs.adapters.MainRecyclerAdapter
 import com.example.ocs.data.Product
 import com.example.ocs.data.ProductState
@@ -53,6 +55,20 @@ class HomeFragment : Fragment() {
 
         return view
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_home_menu, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+
+        // Установка обработчика клика для элемента меню
+        searchItem.setOnMenuItemClickListener {
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            startActivity(intent)
+            true
+        }
+    }
+
+
 
     private fun setupRecyclerView() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)

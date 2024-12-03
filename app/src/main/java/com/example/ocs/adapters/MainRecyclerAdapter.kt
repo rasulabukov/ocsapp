@@ -1,5 +1,6 @@
 package com.example.ocs.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +14,11 @@ import com.example.ocs.R
 import com.example.ocs.data.Product
 
 class MainRecyclerAdapter(
-    private val productList: List<Product>,
+    private var productList: List<Product>,
     private val onItemClick: (Product) -> Unit
 ) : RecyclerView.Adapter<MainRecyclerAdapter.ProductViewHolder>() {
+
+    private var filteredList: List<Product> = productList
 
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.computer_image)
@@ -58,8 +61,20 @@ class MainRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        holder.bind(productList[position])
+        holder.bind(filteredList[position])
     }
 
-    override fun getItemCount(): Int = productList.size
+    override fun getItemCount(): Int = filteredList.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun filter(query: String) {
+        filteredList = if (query.isEmpty()) {
+            productList
+        } else {
+            productList.filter { product ->
+                product.name!!.contains(query, ignoreCase = true)
+            }
+        }
+        notifyDataSetChanged()
+    }
 }
