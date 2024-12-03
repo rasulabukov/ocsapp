@@ -31,6 +31,7 @@ class SearchActivity : AppCompatActivity() {
         back = findViewById(R.id.back)
         viewModel = ViewModelProvider(this).get(SupabaseProductsViewModel::class.java)
 
+        searchView.requestFocus()
         setupRecyclerView()
         observeViewModel()
         setupSearch()
@@ -60,7 +61,10 @@ class SearchActivity : AppCompatActivity() {
     private fun setupSearch() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { adapter.filter(it) }
+                query?.let {
+                    adapter.filter(it)
+                    searchView.clearFocus()
+                }
                 return true
             }
 
