@@ -7,5 +7,29 @@
     style="@style/SCREEN">
 
 
+    <LinearLayout
+        android:id="@+id/favourite_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/male_user_shadow_svgrepo_com"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ar_one_sans_medium"
+            android:text="Список контактов пуст"
+            android:textColor="#646464"
+            android:textSize="15sp" />
+
+
+    </LinearLayout>
 
 </RelativeLayout>

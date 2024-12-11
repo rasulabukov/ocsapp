@@ -97,7 +97,7 @@ class ProfileActivity : AppCompatActivity() {
 
         }
         adminpanel.setOnClickListener {
-            startActivity(Intent(this, AdminActivity::class.java))
+            startActivity(Intent(this, AddProductActivity::class.java))
             finish()
         }
         openDialogTextView.setOnClickListener {

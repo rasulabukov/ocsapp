@@ -10,6 +10,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -19,7 +20,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.ocs.NetworkUtils
 import com.example.ocs.R
+import com.example.ocs.activities.ItemActivity
 import com.example.ocs.activities.SearchActivity
 import com.example.ocs.adapters.MainRecyclerAdapter
 import com.example.ocs.data.Product
@@ -35,6 +38,7 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MainRecyclerAdapter
     private lateinit var refreshView: SwipeRefreshLayout
+    private lateinit var network: LinearLayout
     private var productList = mutableListOf<Product>()
 
     override fun onCreateView(
@@ -45,9 +49,10 @@ class HomeFragment : Fragment() {
         setHasOptionsMenu(true)
         recyclerView = view.findViewById(R.id.recycler_View)
         refreshView = view.findViewById(R.id.refresh)
+        network = view.findViewById(R.id.network)
         viewModel = ViewModelProvider(this).get(SupabaseProductsViewModel::class.java)
-        setupRecyclerView()
-        loadProductsFromViewModel()
+        checkInternetConnection()
+
 
         refreshView.setOnRefreshListener {
             loadProductsFromViewModel()
@@ -74,6 +79,7 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         adapter = MainRecyclerAdapter(productList) { product ->
             Toast.makeText(requireContext(), "Вы выбрали: ${product.name}", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(requireContext(), ItemActivity::class.java))
         }
         recyclerView.adapter = adapter
 
@@ -107,5 +113,15 @@ class HomeFragment : Fragment() {
 
     private fun loadProductsFromViewModel() {
         viewModel.loadProductInfo()
+    }
+
+    private fun checkInternetConnection() {
+        if (!NetworkUtils.isNetworkAvailable(requireContext())) {
+            network.visibility = View.VISIBLE
+        } else {
+            network.visibility = View.GONE
+            setupRecyclerView()
+            loadProductsFromViewModel()
+        }
     }
 }
