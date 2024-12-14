@@ -47,7 +47,6 @@
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:src="@drawable/test"
                 android:scaleType="centerCrop"/>
 
             <View
@@ -92,6 +91,16 @@
                     android:textColor="#838383"
                     android:layout_marginTop="10dp"
                     android:text="Описание товара"
+                    android:fontFamily="@font/adlam_display"/>
+
+                <TextView
+                    android:id="@+id/quantity_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#838383"
+                    android:layout_marginTop="10dp"
+                    android:text="Количество"
                     android:fontFamily="@font/adlam_display"/>
 
 
@@ -429,7 +438,6 @@
                         android:layout_weight="1"
                         android:textAllCaps="false"
                         android:layout_gravity="start|center"
-                        android:textColor="@color/black"
                         android:layout_margin="5dp"
                         android:id="@+id/on_cart"
                         />

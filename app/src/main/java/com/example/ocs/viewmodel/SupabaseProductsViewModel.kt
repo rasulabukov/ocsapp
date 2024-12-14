@@ -16,6 +16,9 @@ class SupabaseProductsViewModel(): ViewModel() {
     private val _productList = MutableLiveData<List<Product>>()
     val productList: LiveData<List<Product>> get() = _productList
 
+    private val _product = MutableLiveData<Product?>()
+    val product: LiveData<Product?> get() = _product
+
     private val _productState = MutableLiveData<ProductState>()
     val productState: LiveData<ProductState> get() = _productState
 
@@ -26,12 +29,33 @@ class SupabaseProductsViewModel(): ViewModel() {
             try {
                 // Получаем данные из таблицы products
                 val response = supabase.from("products")
-                    .select(columns = Columns.list("name", "description", "price", "size", "quantity", "image")){
+                    .select(columns = Columns.list("id", "name", "description", "price", "size", "quantity", "image")){
                         order(column = "id", order = Order.ASCENDING)
                     }
                     .decodeList<Product>() // Декодируем результат в список объектов Product
 
                 _productList.value = response // Обновляем LiveData
+                _productState.value = ProductState.Success("Успех")// Устанавливаем состояние успешной загрузки
+            } catch (e: Exception) {
+                _productState.value = ProductState.Error(e.message ?: "Ошибка загрузки данных") // Обрабатываем ошибки
+            }
+        }
+    }
+
+    fun loadProductInfoItemActivity(productId: Int) {
+        viewModelScope.launch {
+            _productState.value = ProductState.Loading // Устанавливаем состояние загрузки
+            try {
+                // Получаем данные из таблицы products
+                val response = supabase.from("products")
+                    .select(columns = Columns.list("id", "name", "description", "price", "size", "quantity", "image")){
+                        filter {
+                            Product::id eq productId
+                        }
+                    }
+                    .decodeSingle<Product>() // Декодируем результат в список объектов Product
+
+                _product.value = response // Обновляем LiveData
                 _productState.value = ProductState.Success("Успех")// Устанавливаем состояние успешной загрузки
             } catch (e: Exception) {
                 _productState.value = ProductState.Error(e.message ?: "Ошибка загрузки данных") // Обрабатываем ошибки

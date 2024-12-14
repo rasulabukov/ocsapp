@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Product(
-    val id: String? = null,
+    var id: Int? = null,
     val name: String? = null,
     val description: String? = null,
     val price: String? = null,

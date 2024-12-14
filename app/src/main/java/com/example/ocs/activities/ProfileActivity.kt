@@ -31,6 +31,7 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -97,8 +98,7 @@ class ProfileActivity : AppCompatActivity() {
 
         }
         adminpanel.setOnClickListener {
-            startActivity(Intent(this, AddProductActivity::class.java))
-            finish()
+            showDialogAdmin()
         }
         openDialogTextView.setOnClickListener {
             showCustomDialog()
@@ -194,6 +194,29 @@ class ProfileActivity : AppCompatActivity() {
         }
         btnno.setOnClickListener {
             dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun showDialogAdmin() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.admin_main_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val add: TextView = dialog.findViewById(R.id.add)
+        val edit: TextView = dialog.findViewById(R.id.edit)
+        val delete: TextView = dialog.findViewById(R.id.delete)
+
+        add.setOnClickListener {
+            Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
+        }
+        edit.setOnClickListener {
+            Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
+        }
+        delete.setOnClickListener {
+            Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
         }
         dialog.show()
     }

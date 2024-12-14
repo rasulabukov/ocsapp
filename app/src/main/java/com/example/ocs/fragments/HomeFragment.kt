@@ -78,8 +78,10 @@ class HomeFragment : Fragment() {
     private fun setupRecyclerView() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         adapter = MainRecyclerAdapter(productList) { product ->
-            Toast.makeText(requireContext(), "Вы выбрали: ${product.name}", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(requireContext(), ItemActivity::class.java))
+            val intent = Intent(requireContext(), ItemActivity::class.java)
+            intent.putExtra("PRODUCT_ID", product.id)
+            startActivity(intent)
+
         }
         recyclerView.adapter = adapter
 
