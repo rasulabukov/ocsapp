@@ -77,12 +77,13 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        adapter = MainRecyclerAdapter(productList) { product ->
+        adapter = MainRecyclerAdapter(productList, { product ->
             val intent = Intent(requireContext(), ItemActivity::class.java)
             intent.putExtra("PRODUCT_ID", product.id)
             startActivity(intent)
-
-        }
+        }, { product ->
+            viewModel.addProductToFavorites(product.id)
+        })
         recyclerView.adapter = adapter
 
         // Наблюдаем за изменениями в списке продуктов

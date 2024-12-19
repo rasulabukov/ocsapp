@@ -42,9 +42,11 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        adapter = MainRecyclerAdapter(productList) { product ->
+        adapter = MainRecyclerAdapter(productList, { product ->
             Toast.makeText(this, "Вы выбрали: ${product.name}", Toast.LENGTH_SHORT).show()
-        }
+        }, { product ->
+            viewModel.addProductToFavorites(product.id) // Handle favorite click
+        })
         recyclerView.adapter = adapter
     }
 
